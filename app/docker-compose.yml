@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+  
+  back:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file: 
+        - ./backend/.env.local
+      #command ...コンテナ起動時に実行するコマンド
+      #bash -c "..." bashシェルを起動して、""内のコマンドを実行
+      #Railsはサーバー起動時にtmp/pids/server.pidというファイルを作る。終了時に
+      # このファイルが残っていると、「サーバーが起動中」とエラーが出るので、削除する必要がある
+      # -b '0.0.0.0'でコンテナの外空でもアクセスできるように全てのアドレスで待ち受ける
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
+      # PC側でソースコードを変更したときに、その内容がコンテナ内にそく反映させる
+    volumes: 
+        - ./backend:/app
+    ports:
+        - "3000:3000"
+    depends_on:
+        - db
+    tty: true
+    stdin_open: true
+  front:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+    command: yarn start
+    ports:
+      - "8000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true   # これも入れるとより安定
+volumes:
+  mysql_data:
