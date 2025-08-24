@@ -8,6 +8,21 @@ Bundler.require(*Rails.groups)
 
 module App
   class Application < Rails::Application
+
+    # 追記：CORSエラー解消
+    # config.middleware.insert_before 0, Rack::Cors do
+    #   allow do
+    #     origin "http://localhost:8000"
+    #     resource "*",
+    #     headers: :any,
+    #     methods: [:get, :post, :put, :patch, :delete, :options, :head],
+    #     expose: %w[Authorization Uid],
+    #     credentials: true
+    #   end
+    # end
+    # ここまで
+
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
