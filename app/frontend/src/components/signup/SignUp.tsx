@@ -3,7 +3,9 @@ import { Avatar, Container, CssBaseline, Typography } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useState } from "react";
 import axios from "axios";
+import axiosCaseConverter from "simple-axios-case-converter";
 
+axiosCaseConverter(axios)
 // export default function SignUp(){
 //   return(
 //     <Container component='main' maxWidth='xs'>
@@ -49,6 +51,7 @@ export default function SignUp() {
   const hundleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      console.log('userData:',userData)
       const response = await axios.post(
         apiUrl,
         { user: userData },
@@ -61,7 +64,7 @@ export default function SignUp() {
       );
       console.log("成功", response.data);
     } catch (err: any) {
-      console.log("エラー", err);
+      console.log("エラー", err.response.data);
     }
   };
 
