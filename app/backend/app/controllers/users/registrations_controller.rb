@@ -3,6 +3,11 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
   include RackSessionFix
+  
+  def create
+    super
+  end
+
   private
 
   def respond_with(resource, _opts = {})
