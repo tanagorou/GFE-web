@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import { Avatar, Container, CssBaseline, Typography } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useState } from "react";
 import axios from "axios";
 import axiosCaseConverter from "simple-axios-case-converter";
@@ -9,23 +7,17 @@ import { useNavigate } from "react-router-dom";
 axiosCaseConverter(axios)
 
 type userData = {
-  // firstName: string;
-  // lastName: string;
   email: string;
   password: string;
-  passwordConfirmation: string;
 };
 
-export default function SignUp() {
-  const apiUrl = "http://localhost:3000/signup";
+export default function SignIn() {
+  const apiUrl = "http://localhost:3000/login";
   const navigate = useNavigate()
 
   const [userData, setUserData] = useState<userData>({
-    // firstName:'',
-    // lastName: '',
     email: "",
     password: "",
-    passwordConfirmation: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +42,7 @@ export default function SignUp() {
           },
         }
       );
-      console.log("成功", response.data);
+      console.log("成功", response);
       navigate('/')
     } catch (err: any) {
       console.log("エラー", err.response.data);
@@ -61,26 +53,6 @@ export default function SignUp() {
     <div>
       <h1>サインアップフォーム</h1>
       <form onSubmit={hundleSubmit}>
-        {/* <div>
-          <label htmlFor="firstName">名</label>
-          <input
-            id="firstName"
-            name="firstName"
-            type="text"
-            placeholder="博士"
-            value={ userData.firstName }
-            onChange={handleChange}
-          />
-          <label htmlFor="lastName">姓</label>
-          <input
-            id="lastName"
-            name="lastName"
-            type="text"
-            placeholder="太郎"
-            value={ userData.lastName }
-            onChange={handleChange}
-          />
-        </div> */}
         <div>
           <label htmlFor="email">メールアドレス</label>
           <input
@@ -103,18 +75,7 @@ export default function SignUp() {
             onChange={handleChange}
           />
         </div>
-        <div>
-          <label htmlFor="passwordConfirmation">再パスワード</label>
-          <input
-            id="passwordSecopasswordConfirmationnd"
-            name="passwordConfirmation"
-            type="password"
-            placeholder="再パスワード"
-            value={userData.passwordConfirmation}
-            onChange={handleChange}
-          />
-        </div>
-        <button>サインアップ</button>
+        <button>サインイン</button>
       </form>
     </div>
   );
