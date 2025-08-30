@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import axiosCaseConverter from "simple-axios-case-converter";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 axiosCaseConverter(axios)
 
@@ -14,6 +15,7 @@ type userData = {
 export default function SignIn() {
   const apiUrl = "http://localhost:3000/login";
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const [userData, setUserData] = useState<userData>({
     email: "",
@@ -43,6 +45,7 @@ export default function SignIn() {
         }
       );
       console.log("成功", response);
+      login(response.headers.authorization)
       navigate('/')
     } catch (err: any) {
       console.log("エラー", err.response.data);
