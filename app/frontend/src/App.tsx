@@ -7,6 +7,7 @@ import Index from './pages/Index';
 import SignIn from './components/signin/SignIn';
 import Home from './pages/Home';
 import { AuthProvider } from './context/AuthContext';
+import { Navbar } from './layouts/Navbar/Index';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
     <div className="App">
       <AuthProvider>
        <BrowserRouter>
+       <Navbar />
           <Routes>
             <Route path='/index' element={<Index />} />
             <Route path='/signup' element={<SignUp />} />

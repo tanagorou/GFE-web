@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from "react"
 
 export default function Home(){
@@ -5,6 +6,9 @@ export default function Home(){
   return (
     <div>
       Welecome To GFE-web
+      <div>
+        <Link to='/study'>勉強する</Link>
+      </div>
     </div>
   )
 }
