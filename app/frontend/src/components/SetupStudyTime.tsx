@@ -51,7 +51,7 @@ export default function SetupStudyTime({ onChangeTime, onNext, onClose}:Props) {
   }
     return (
       <div className="overlay">
-        <div className="content">
+        <div className="modalContent">
           <h4>作業時間を設定してください</h4>
           <div className="displayTimer">{formatTime(timerCount)}</div>
           <button onClick={() => plus(ONE_SECONDS)}>+1秒</button>
