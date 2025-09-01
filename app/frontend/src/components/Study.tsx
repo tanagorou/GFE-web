@@ -1,5 +1,6 @@
 import { useState } from "react";
 import './Study.css'
+import Timer from "./Timer";
 
 const ONE_SECONDS = 1000;
 const ONE_MINUTES = 60000;
@@ -35,6 +36,7 @@ export default function Study({studyTime, restTime, onOpenStudy}:Props){
         <p>休憩時間</p>
         {formatTime(restTime)}
       </div>
+      <Timer time={studyTime} timeData={{ studyTime: studyTime, restTime: restTime}} />
       <button onClick={onOpenStudy}>詳細設定</button>
     </div>
   )
