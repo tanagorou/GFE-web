@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+yarn-error.log
+.build
+build
+dist
+.cache
+coverage
+.git
+.DS_Store
