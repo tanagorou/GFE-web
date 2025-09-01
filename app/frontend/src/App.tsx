@@ -19,7 +19,11 @@ function App() {
       <AuthProvider>
        <BrowserRouter>
        <Navbar />
-       <Sidebar />
+       <div className='main'>
+        <div className='sidebar'>
+          <Sidebar />
+        </div>
+          <div className='content'>
           <Routes>
             <Route path='/index' element={<Index />} />
             <Route path='/signup' element={<SignUp />} />
@@ -27,6 +31,8 @@ function App() {
             <Route path='/' element={<Home />} />
           </Routes>
           <StudyPage />
+          </div>
+       </div>
         </BrowserRouter>
       </AuthProvider>
     </div>
