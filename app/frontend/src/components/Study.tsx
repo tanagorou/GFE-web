@@ -15,6 +15,12 @@ type Props = {
 }
 
 export default function Study({studyTime, restTime, onOpenStudy}:Props){
+  const [ totalTime, setTotalTime ] = useState({'study':0, 'rest':0})
+
+  const storeTotal = (data: any) => {
+    setTotalTime(data)
+    console.log(totalTime)
+  }
 
   const formatTime = (msSeconds: number) => {
     const hour = Math.floor(msSeconds / ONE_HOURS);
@@ -26,18 +32,33 @@ export default function Study({studyTime, restTime, onOpenStudy}:Props){
   };
 
   return(
-    <div>
-      <h1>今日も一日頑張りましょう</h1>
-      <div>
-        <p>作業時間</p>
-        {formatTime(studyTime)}
+    <>
+      <div className="study">
+        <div className="timerLayout">
+        <Timer 
+          timeData={{ studyTime: studyTime, restTime: restTime}}
+          totalTime={totalTime}
+          storeTotal={storeTotal}
+          />
+        </div>
+        <div className="setupDetailLayout">
+            <div className="setupStudy">
+              <h2>作業時間</h2>
+              <div className="studyTime">
+                {formatTime(studyTime)}
+              </div>
+            </div>
+            <div className="setupRest">
+              <h2>休憩時間</h2>
+              <div className="restTime">
+                {formatTime(restTime)}
+              </div>
+            </div>
+            <div className="button">
+              <button onClick={onOpenStudy}>詳細設定</button>
+            </div>
+        </div>
       </div>
-      <div>
-        <p>休憩時間</p>
-        {formatTime(restTime)}
-      </div>
-      <Timer time={studyTime} timeData={{ studyTime: studyTime, restTime: restTime}} />
-      <button onClick={onOpenStudy}>詳細設定</button>
-    </div>
+    </>
   )
 }
