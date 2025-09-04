@@ -14,6 +14,7 @@ export default function StudyPage() {
   const [ studyTimeMs, setStudyTimeMs ] = useState(0)
   const [ restTimeMs, setRestTimeMs ] = useState(0)
 
+
   const location = useLocation();
   const navigate = useNavigate();
   const background = (location.state as BackgroundLocation)?.background;

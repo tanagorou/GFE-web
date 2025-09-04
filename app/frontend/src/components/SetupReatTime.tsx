@@ -43,7 +43,7 @@ export default function SetupRestTime({onChangeTime,onClose}:props) {
 
     return (
       <div className="overlay">
-        <div className="content">
+        <div className="modalContent">
           <h4>休憩時間を設定してください</h4>
           <div className='displayTimer'>
             {formatTime(timerCount)}
