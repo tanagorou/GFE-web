@@ -1,4 +1,48 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :validatable,
-         :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+  has_secure_password
+  include TokenGenerateService
+
+  validates :name, presence: true,
+                   length: { maximum: 30, allow_blank: true}
+
+  VALID_PASSWORD_REGEX = /\A[\w\-]+\z/
+  validates :password, presence: true,
+                       length: { minimum: 8 },
+                       format: {
+                         with: VALID_PASSWORD_REGEX
+                       },
+                       allow_nil: true
+
+  validates :activated, inclusion: { in: [ true, false ] }
+
+  class << self
+    def find_by_activated(email)
+      find_by(email: email, activated: true)
+    end
+  end
+
+  def email_activated?
+    users = User.where.not(id: id)
+    users.find_by_activated(email).present
+  end
+
+  #リフレッシュトークンのJWT IDを記憶する
+  def remember(jti)
+    update!(refresh_jti: jti)
+  end
+
+  def forget(jti)
+    update!(refresh_jti: nil)
+  end
+
+  def response_json(payload = {})
+    as_json(only: [:id, :name, :email]).merge(payload).with_indifferent_access
+  end
+
+
+  private
+
+  def downcase_email
+    self.email.downcase! if email
+  end
 end

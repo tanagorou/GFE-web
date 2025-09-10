@@ -7,3 +7,15 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+
+table_names = %w(users)
+
+table_names.each do |table_names|
+  path = Rails.root.join("db/seeds/#{Rails.env}/#{table_names}.rb")
+
+  path = path.sub(Rails.env, "development") unless File.exist?(path)
+
+  puts "#{table_names}..."
+  require path
+end
