@@ -9,7 +9,22 @@ class ApplicationController < ActionController::API
   # 認可を行う
   include UserAuthenticateService
 
+  # CSRF対策
+  before_action :xhr_request?
+
   private
+
+    # XMLHttpRequestでない場合は403エラーを返す
+    def xhr_request?
+      # リクエストヘッダ X-Requested-With: 'XMLHttpRequest' の存在を判定
+      return if request.xhr?
+      render status: :forbidden, json: { status: 403, error: "Forbidden" }
+    end
+
+    # Internal Server Error
+    def response_500(msg = "Internal Server Error")
+      render status: 500, json: { status: 500, error: msg }
+    end
 
   def set_cors_headers
     response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8000'
@@ -18,13 +33,11 @@ class ApplicationController < ActionController::API
     response.headers['Access-Control-Allow-Credentials'] = 'true'
   end
 
-  protected
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :email, :password, :password_confirmation ])
-    devise_parameter_sanitizer.permit(:sign_in, keys: [ :email, :password ])
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :password, :password_confirmation ])
-  end
+  # def configure_permitted_parameters
+  #   devise_parameter_sanitizer.permit(:sign_up, keys: [ :email, :password, :password_confirmation ])
+  #   devise_parameter_sanitizer.permit(:sign_in, keys: [ :email, :password ])
+  #   devise_parameter_sanitizer.permit(:account_update, keys: [ :password, :password_confirmation ])
+  # end
 
 
 #   def authenticate_request

@@ -1,4 +1,3 @@
-# api/app/controllers/api/v1/auth_token_controller.rb
 class Api::V1::AuthTokenController < ApplicationController
   include UserSessionizeService
 
@@ -8,6 +7,8 @@ class Api::V1::AuthTokenController < ApplicationController
   rescue_from JWT::InvalidJtiError, with: :invalid_jti
 
   # userのログイン情報を確認する
+  # 追記：User#authenticateを呼ぶ。しかしこれはUser.rbにhas_secure_passwordを定義している場合にのみ利用可能
+  #      has_secure_passwordは「gem bcrypt」を有効にする必要がある。
   before_action :authenticate, only: [:create]
   # 処理前にsessionを削除する
   before_action :delete_session, only: [:create]
@@ -45,8 +46,8 @@ class Api::V1::AuthTokenController < ApplicationController
    # ログインユーザーが居ない、もしくはpasswordが一致しない場合404を返す
    def authenticate
      unless login_user.present? &&
-            login_user.(auth_params[:password])
-       raise UserAuth.not_found_authenticateexception_class
+            login_user.authenticate(auth_params[:password])
+       raise UserAuth.not_found_exception_class
      end
    end
 
