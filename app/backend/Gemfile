@@ -40,7 +40,13 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
+gem "jwt"
 
+gem "bcrypt"
 
 gem "devise", "~> 4.9"
 gem "devise-jwt", "~> 0.12.1"
+
+
+gem 'omniauth-google-oauth2'
+gem 'omniauth-rails_csrf_protection'
