@@ -14,6 +14,8 @@ services:
       dockerfile: Dockerfile
     env_file: 
         - ./backend/.env.local
+    environment:
+      BASE_URL: "http://localhost:3000"
       #command ...コンテナ起動時に実行するコマンド
       #bash -c "..." bashシェルを起動して、""内のコマンドを実行
       #Railsはサーバー起動時にtmp/pids/server.pidというファイルを作る。終了時に
