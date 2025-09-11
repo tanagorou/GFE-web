@@ -4,7 +4,7 @@ import axios from "axios";
 import axiosCaseConverter from "simple-axios-case-converter";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { styled } from "@material-ui/core";
+import { styled } from '@mui/material/styles';
 import { Button, TextField } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Link from '@mui/material/Link';
