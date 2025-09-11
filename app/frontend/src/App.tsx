@@ -11,32 +11,45 @@ import { Navbar } from './layouts/Navbar/Index';
 import Timer from './components/Timer';
 import StudyPage from './pages/StudyPage';
 import Sidebar from './components/Sidebar/Sidebar';
+import { GoogleIcon } from './components/GoogleIcon';
+import AppRoutes from './routes';
 
 
-function App() {
+// function App() {
+//   return (
+//     <div className="App">
+//       <AuthProvider>
+//        <BrowserRouter>
+//        <Navbar />
+//        <div className='main'>
+//         <div className='sidebar'>
+//           <Sidebar />
+//         </div>
+//           <div className='content'>
+//           <GoogleIcon />
+//           <Routes>
+//             <Route path='/index' element={<Index />} />
+//             <Route path='/signup' element={<SignUp />} />
+//             <Route path='/signin' element={<SignIn />} />
+//             <Route path='/' element={<Home />} />
+//           </Routes>
+//           <StudyPage />
+//           </div>
+//        </div>
+//         </BrowserRouter>
+//       </AuthProvider>
+//     </div>
+//   );
+// }
+
+function App(){
   return (
-    <div className="App">
       <AuthProvider>
-       <BrowserRouter>
-       <Navbar />
-       <div className='main'>
-        <div className='sidebar'>
-          <Sidebar />
-        </div>
-          <div className='content'>
-          <Routes>
-            <Route path='/index' element={<Index />} />
-            <Route path='/signup' element={<SignUp />} />
-            <Route path='/signin' element={<SignIn />} />
-            <Route path='/' element={<Home />} />
-          </Routes>
-          <StudyPage />
-          </div>
-       </div>
+        <BrowserRouter>
+          <AppRoutes />
         </BrowserRouter>
       </AuthProvider>
-    </div>
-  );
+  )
 }
 
 export default App;
