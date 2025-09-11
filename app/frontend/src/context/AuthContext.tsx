@@ -1,3 +1,4 @@
+import axios from "axios"
 import { createContext, useContext, useEffect, useState } from "react"
 
 type AuthContextType = {
@@ -6,12 +7,16 @@ type AuthContextType = {
   login: (token: string) => void
   logout: () => void
   getToken: () => string | null
+  setToken: (v:string | null) => void
+  currentUser: string | null
+  setCurrentUser: (v: string | null) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
   const [token, setToken] =  useState<string | null>(localStorage.getItem('token'))
+  const [currentUser, setCurrentUser] = useState<string | null>(null)
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token')
@@ -20,20 +25,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
     }
   },[])
 
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search)
+    const tokenFromUrl = query.get('token')
+    if(tokenFromUrl){
+      setToken(tokenFromUrl)
+      localStorage.setItem('authToken',tokenFromUrl)
+    } else {
+      const storedToken = localStorage.getItem('authToken')
+      if(storedToken){
+        setToken(storedToken)
+      }
+    }
+  },[])
+
+
   const login = (newToken: string) => {
-    localStorage.setItem('token', newToken)
+    localStorage.setItem('accessToken', newToken)
     setToken(newToken)
   }
 
   const logout = () => {
-    localStorage.removeItem('token')
+    localStorage.removeItem('authToken')
     setToken(null)
   }
 
   const getToken = () => token
   
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!token, token, login, logout, getToken}}>
+    <AuthContext.Provider value={{ isAuthenticated: !!token, token, login, logout, getToken, setToken, currentUser, setCurrentUser}}>
       {children}
     </AuthContext.Provider>
   )
