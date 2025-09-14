@@ -13,7 +13,7 @@ export const setAccessToken = (data: null) => {
   const token = data.token
   const [, payload] = token.split(".")
   const decoded = JSON.parse(atob(payload))
-  const currentAccessToken = { auth: { token: token, expires: decoded.exp, payload: { decoded } } }
+  const currentAccessToken = { auth: { token: token, expires: decoded.exp * 1000, payload: { ...decoded } } }
   return currentAccessToken
 }
 // 3. レスポンスからexpを格納する関数 => setExp
@@ -23,14 +23,17 @@ export const isExpired = (token) => {
   return Date.now() >= token.auth.expires
 }
 // Userが存在しているかどうか確認（data.user.subとtoken.payload.subがあり、一致するかどうか）　isExistUser
-export const isExistUser = (data) => {
-  return data.user.sub && data.auth.payload.sub && data.user.sub == data.auth.payload.sub
+export const isExistUser = (data: any) => {
+  return data?.user?.current?.sub && data?.auth?.payload?.sub && data?.user?.current?.sub == data?.auth?.payload?.sub
 }
 // Userが存在し、accessトークンが有効かどうか。有効期限切れのときにtrueを返す。isExistUserAndExpired
 export const isExistUserAndExpired = (data) => {
-  return isExistUser(data) && !isExpired(data)
+  return isExistUser(data) && isExpired(data)
 }
 // ユーザーが存在し、かつ有効の場合、そのUserはログイン状態とする　loggedIn
+export const loggedIn = (data) => {
+  return isExistUser(data) && !isExpired(data)
+}
 
 // useEffectはページ遷移したとき呼ばれてしまうのでif文で条件分岐を行う必要がある。
 // そこでisExistUserAndExpiredが有効の場合、サイレントリフレッシュを行う。

@@ -1,7 +1,8 @@
 import axios from "axios"
 import axiosCaseConverter from "simple-axios-case-converter";
 import { createContext, useContext, useEffect, useState } from "react"
-import {setAccessToken, setCurrentUser, isExistUser, isExpired, isExistUserAndExpired} from "./Auth"
+import {setAccessToken, setCurrentUser, isExistUser, isExpired, isExistUserAndExpired, loggedIn} from "./Auth"
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 type AuthContextType = {
@@ -18,6 +19,8 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
+  const navigate = useNavigate()
+  const location = useLocation()
   // const [currentUser, setCurrentUser] = useState<string | null>(null)
 
   const [authToken, setAuthToken] = useState({user:{current: null}, auth: {token: null, expires: 0, payload: {}}})
@@ -39,6 +42,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
     console.log(authToken)
   },[authToken])
 
+  useEffect(() => {
+    console.log('ページ遷移しました')
+    console.log('now', new Date(Date.now()))
+    console.log('exp', new Date(authToken.auth.expires))
+    console.log(isExistUser(authToken))
+    if(isExistUserAndExpired(authToken)){
+      (async () => {
+        try{
+          const response = await axios.post(
+            'http://localhost:3000/api/v1/auth_token/refresh',
+            {},
+            {
+              withCredentials: true,
+              headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          const data = response.data
+          setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
+        } catch (err){
+          console.log(err)
+        }
+      })()
+    }
+  },[location.pathname])
+
+  useEffect(() => {
+    // console.log(authToken)
+    if(!isExistUser(authToken)){
+      navigate('/signin')
+    }
+  }, []);
+
 
   const login = (data: any) => {
     const user = setCurrentUser(data)
@@ -46,12 +84,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
     const merge = {...user, ...accessToken}
     setAuthToken({...setCurrentUser(data), ...setAccessToken(data)})
     // console.log(user,accessToken)
-    console.log(merge)
-    console.log(authToken)
+    // console.log(merge)
+    // console.log(authToken)
   }
 
   const logout = () => {
-    
+    setAuthToken({user:{current: null}, auth: {token: null, expires: 0, payload: {}}})
   }
 
   // const getToken = () => token
