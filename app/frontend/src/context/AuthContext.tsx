@@ -42,6 +42,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
     console.log(authToken)
   },[authToken])
 
+
+
   useEffect(() => {
     console.log('ページ遷移しました')
     console.log('now', new Date(Date.now()))
@@ -70,11 +72,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
     }
   },[location.pathname])
 
+
+//リロード時にトークンを発行するように設定
+// 原因: useStateが初期値に更新され、/signupに飛ばされてしまう
   useEffect(() => {
     // console.log(authToken)
-    if(!isExistUser(authToken)){
-      navigate('/signin')
-    }
+    (async() => {
+      try{
+        const respone = await axios.post(
+          "http://localhost:3000/api/v1/auth_token/refresh",
+          {},
+          { 
+            withCredentials: true,
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        const data = respone.data
+        setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
+      } catch {(err: any) => {
+        console.log('リフレッシュトークンの有効期限が切れました。',err)
+        navigate('/signin')
+      }}
+    })()
   }, []);
 
 
