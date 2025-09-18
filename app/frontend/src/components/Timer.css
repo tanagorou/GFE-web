@@ -1,0 +1,8 @@
+.buttonField{
+  display: flex;
+  justify-content: center;
+}
+
+.Timer{
+  min-height: 92vh;
+}

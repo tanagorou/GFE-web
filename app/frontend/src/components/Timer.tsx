@@ -5,8 +5,21 @@ import PlayCircleFilledWhiteOutlinedIcon from '@mui/icons-material/PlayCircleFil
 import RotateLeftOutlinedIcon from '@mui/icons-material/RotateLeftOutlined';
 import StopCircleOutlinedIcon from '@mui/icons-material/StopCircleOutlined';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import { time } from 'console';
+import { styled } from '@mui/material/styles';
+
+const TimerContainer = styled('div')({
+  display: 'flex',
+  minHeight: '92vh',
+  flexDirection: 'column'
+})
+
+const TimerCircle = styled('div')({
+  flex: '1',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: '20px'
+})
 
 
 const ONE_SECONDS = 1000;
@@ -106,12 +119,14 @@ export default function Timer({timeData, totalTime, storeTotal}: timerProps){
   
 
   return(
-    <div className='timer'>
+    <TimerContainer>
+      <TimerCircle>
         <CircularProgress 
           totalMs={ restState ? timeData.restTime : timeData.studyTime } 
           remainingMs={ timerCount }
           />
-      <Grid container direction='row' sx={{  justifyContent: 'space-evenly', alignItems: 'center', mt: 4}}>
+      </TimerCircle>
+        <Grid container direction='row' sx={{  flex: '1',justifyContent: 'center', alignItems: 'flex-start', gap: 6}}>
           <IconButton onClick={() => start()} >
             <PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 100}}/>
           </IconButton>
@@ -122,6 +137,6 @@ export default function Timer({timeData, totalTime, storeTotal}: timerProps){
             <RotateLeftOutlinedIcon sx={{fontSize: 100}}/>
           </IconButton>
       </Grid>
-    </div>
+    </TimerContainer>
   )
 }
