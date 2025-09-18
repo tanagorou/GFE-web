@@ -1,6 +1,8 @@
 import { useState } from "react";
 import './Study.css'
 import Timer from "./Timer";
+import { styled } from '@mui/material/styles';
+import TimeField from "./TimeField";
 
 const ONE_SECONDS = 1000;
 const ONE_MINUTES = 60000;
@@ -13,6 +15,31 @@ type Props = {
   restTime: number
   onOpenStudy: () => void
 }
+
+const Container = styled('div')({
+  minHeight: '92vh',
+  display: 'flex',
+  backgroundColor: '#f5f5f5',
+})
+
+const TimeCard = styled('div')({
+  flexDirection:'column',
+  flexBasis: '50%'
+})
+
+const SetUpCard = styled('div')({
+  flexDirection: 'column',
+  flexBasis: '50%'
+})
+
+const SetUpStudy = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'center',
+  height: '60%',
+  marginLeft: '10%'
+})
 
 export default function Study({studyTime, restTime, onOpenStudy}:Props){
   const [ totalTime, setTotalTime ] = useState({'study':0, 'rest':0})
@@ -31,34 +58,42 @@ export default function Study({studyTime, restTime, onOpenStudy}:Props){
       .join(":");
   };
 
+  const onSubmit = () => {
+    console.log(totalTime)
+  }
+
   return(
-    <>
-      <div className="study">
-        <div className="timerLayout">
+    <Container>
+      <TimeCard>
         <Timer 
-          timeData={{ studyTime: studyTime, restTime: restTime}}
-          totalTime={totalTime}
-          storeTotal={storeTotal}
-          />
-        </div>
-        <div className="setupDetailLayout">
-            <div className="setupStudy">
-              <h2>作業時間</h2>
-              <div className="studyTime">
-                {formatTime(studyTime)}
-              </div>
-            </div>
-            <div className="setupRest">
-              <h2>休憩時間</h2>
-              <div className="restTime">
-                {formatTime(restTime)}
-              </div>
-            </div>
-            <div className="button">
-              <button onClick={onOpenStudy}>詳細設定</button>
+            timeData={{ studyTime: studyTime, restTime: restTime}}
+            totalTime={totalTime}
+            storeTotal={storeTotal}
+            />
+      </TimeCard>
+      <SetUpCard>
+        <SetUpStudy>
+        <div className="setupStudy">
+          <h2>作業時間</h2>
+            <div className="studyTime">
+              {formatTime(studyTime)}
             </div>
         </div>
-      </div>
-    </>
+        <div className="setupRest">
+          <h2>休憩時間</h2>
+            <div className="restTime">
+            {formatTime(restTime)}
+          </div>
+        </div>
+        {/* <div>
+          <h3>ポモドーロ回数</h3>
+        </div> */}
+        <div className="button">
+          <button onClick={onOpenStudy}>詳細設定</button>
+          <button onClick={onSubmit}>登録する</button>
+        </div>
+        </SetUpStudy>
+      </SetUpCard>
+    </Container>  
   )
 }

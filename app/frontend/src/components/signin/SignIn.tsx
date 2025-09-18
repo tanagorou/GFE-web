@@ -66,8 +66,8 @@ export default function SignIn() {
         }
       );
       console.log("成功", response);
-      login(response.data.token)
-      navigate('/')
+      login(response.data)
+      navigate('/home')
     } catch (err: any) {
       console.log("エラー", err.response.data);
     }
@@ -78,28 +78,6 @@ export default function SignIn() {
       <LoginCard>
         <h1>サインアップフォーム</h1>
         <form onSubmit={hundleSubmit}>
-          {/* <div>
-            <label htmlFor="email">メールアドレス</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="メールアドレス"
-              value={userData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="password">パスワード</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="パスワード"
-              value={userData.password}
-              onChange={handleChange}
-            />
-          </div> */}
           <TextField 
             variant="outlined" 
             margin="normal" 

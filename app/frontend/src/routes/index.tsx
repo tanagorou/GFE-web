@@ -1,10 +1,11 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import SignIn from "../components/signin/SignIn";
 import SignUp from "../components/signup/SignUp";
 import Home from "../pages/Home";
 import Layout from "../layouts/Layout";
 import StudyPage from "../pages/StudyPage";
-
+import Logout from "../components/logout/Logout";
+import { StudyTimeProvider } from "../context/StudyContext";
 
 
 export default function AppRoutes(){
@@ -13,12 +14,18 @@ export default function AppRoutes(){
       <Routes>
         <Route path='/signin' element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} /> 
-        <Route path="/" element={<Layout />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/study/*" element={<StudyPage/>}/>
+        <Route path="/logout" element={<Logout />} />
+        <Route element={
+          <StudyTimeProvider>
+            <Outlet />  
+          </StudyTimeProvider>
+          }>
+          <Route path="/" element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/study/*" element={<StudyPage/>}/>
+          </Route>
         </Route>
       </Routes>
-      <StudyPage/>
     </>
   )
 }

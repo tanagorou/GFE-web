@@ -1,12 +1,27 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import CircularProgress from './CircularProgress'
 import { IconButton } from '@mui/material';
 import PlayCircleFilledWhiteOutlinedIcon from '@mui/icons-material/PlayCircleFilledWhiteOutlined';
 import RotateLeftOutlinedIcon from '@mui/icons-material/RotateLeftOutlined';
 import StopCircleOutlinedIcon from '@mui/icons-material/StopCircleOutlined';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import { time } from 'console';
+import { styled } from '@mui/material/styles';
+import { useStudyTime } from '../context/StudyContext';
+
+
+const TimerContainer = styled('div')({
+  display: 'flex',
+  minHeight: '92vh',
+  flexDirection: 'column'
+})
+
+const TimerCircle = styled('div')({
+  flex: '1',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: '20px'
+})
 
 
 const ONE_SECONDS = 1000;
@@ -24,94 +39,41 @@ let completedTermsStudy = 0
 let completedTermsRest = 0
 
 export default function Timer({timeData, totalTime, storeTotal}: timerProps){
-  const [ timerState, setTimerState ] = useState<string>('standby')
-  const [ timerCount, setTimerCount] = useState<number>(timeData.studyTime)
-  const [ restState, setRestState ] = useState<boolean>(false)
 
-  const timerIdRef = useRef<NodeJS.Timeout | undefined>(undefined)
+  const { studyTime, restTime, restState, setRestState,setNextTimeState, timerCount, setTimerCount} = useStudyTime()
 
-  const formatTime = (msSeconds: number) => {
-    const msSafe = Math.max(msSeconds, 0)
-    const hour = Math.floor(msSafe / ONE_HOURS);
-    const minute = Math.floor((msSafe % ONE_HOURS) / ONE_MINUTES);
-    const second = Math.floor((msSafe % ONE_MINUTES) / ONE_SECONDS);
-    return [hour, minute, second]
-      .map((val: any) => String(val).padStart(2, "0"))
-      .join(":");
-  };
-
-  const handleState = () => {
-    console.log(restState)
-    const next = !restState
-    setRestState(next)
-    if(next){
-      completedTermsStudy = completedTermsStudy + 1
-      setTimerCount(timeData.restTime)
-    } else {
-      completedTermsRest = completedTermsRest + 1
-      setTimerCount(timeData.studyTime)
-    }
-  }
 
   const start = () => {
-    if(timeData.studyTime !== 0){
-      setTimerState('active')
+    if(studyTime !== 0){
+      setNextTimeState('active')
     }
   }
 
   const stop = () => {
-    setTimerState('standby')
-    storeTotal(eachTotalTime())
+    setNextTimeState('standby')
+    // storeTotal(eachTotalTime())
   }
 
   const reset = () => {
-    setTimerState('standby')
-    setRestState(restState ? false : true) //リセットときに休憩かどうかの判定が逆転してしまうので修正
-    setTimerCount(0)
-  }
-
-  //親から渡された時間をセット
-  useEffect(() => {
-    setTimerCount(timeData.studyTime)
-  },[timeData])
-
-  useEffect(() => {
-    if(timerState !== 'active'){
-      return
-    }
-    if(timerCount >= 0){
-      timerIdRef.current = setInterval(() => {
-        setTimerCount((prev) => prev - 1000)
-      }, 1000);
+    console.log('rest', restState)
+    setNextTimeState('standby')
+    // setRestState(restState ? false : true) //リセットときに休憩かどうかの判定が逆転してしまうので修正
+    if(restState){
+      setTimerCount(restTime)
     } else {
-      handleState()
+      setTimerCount(studyTime)
     }
-
-    return() => {
-      clearInterval(timerIdRef.current)
-    }
-  },[timerState, timerCount])
-
-  const eachTotalTime = () => {
-    totalTime.study = timeData.studyTime * completedTermsStudy
-    totalTime.rest = timeData.restTime * completedTermsRest
-    if(!restState){
-      totalTime.study = totalTime.study + timeData.studyTime - timerCount
-    } else {
-      totalTime.rest  = totalTime.rest + timeData.restTime - timerCount
-    }
-    return totalTime
   }
-
-  
 
   return(
-    <div className='timer'>
+    <TimerContainer>
+      <TimerCircle>
         <CircularProgress 
-          totalMs={ restState ? timeData.restTime : timeData.studyTime } 
+          totalMs={ restState ? restTime : studyTime } 
           remainingMs={ timerCount }
           />
-      <Grid container direction='row' sx={{  justifyContent: 'space-evenly', alignItems: 'center', mt: 4}}>
+      </TimerCircle>
+        <Grid container direction='row' sx={{  flex: '1',justifyContent: 'center', alignItems: 'flex-start', gap: 6}}>
           <IconButton onClick={() => start()} >
             <PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 100}}/>
           </IconButton>
@@ -122,6 +84,6 @@ export default function Timer({timeData, totalTime, storeTotal}: timerProps){
             <RotateLeftOutlinedIcon sx={{fontSize: 100}}/>
           </IconButton>
       </Grid>
-    </div>
+    </TimerContainer>
   )
 }
