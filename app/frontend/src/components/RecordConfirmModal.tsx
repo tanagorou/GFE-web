@@ -24,7 +24,7 @@ const formatTime = (msSeconds: number) => {
   return displayTime.join('')
 }
 
-
+// 勉強時間、作業時間を保存
 export const RecordConfirmModal = ({closeModal}: RecordConfirmModalProps) => {
   const {culcurateTotalTime} = useStudyTime()
   const totalTime = culcurateTotalTime()
@@ -36,7 +36,7 @@ export const RecordConfirmModal = ({closeModal}: RecordConfirmModalProps) => {
     try {
       const response = await axios.post(
         'http://localhost:3000/api/v1/study_records',
-        {study_record: {work_minutes: totalTime.record.work_time, rest_minutes: totalTime.record.rest_time}},
+        {study_record: {work_seconds: totalTime.record.work_time, rest_seconds: totalTime.record.rest_time}},
         {
           withCredentials: true,
           headers: {

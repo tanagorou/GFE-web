@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import CircularProgress from './CircularProgress'
 import { IconButton } from '@mui/material';
 import PlayCircleFilledWhiteOutlinedIcon from '@mui/icons-material/PlayCircleFilledWhiteOutlined';
@@ -38,9 +38,9 @@ type timerProps = {
 let completedTermsStudy = 0
 let completedTermsRest = 0
 
-export default function Timer({timeData, totalTime, storeTotal}: timerProps){
+export default function Timer({timeData, storeTotal}: timerProps){
 
-  const { studyTime, restTime, restState, setRestState,setNextTimeState, timerCount, setTimerCount} = useStudyTime()
+  const { studyTime, restTime, restState, setRestState,setNextTimeState, timerCount, setTimerCount, culcurateTotalTime} = useStudyTime()
 
 
   const start = () => {
@@ -51,7 +51,6 @@ export default function Timer({timeData, totalTime, storeTotal}: timerProps){
 
   const stop = () => {
     setNextTimeState('standby')
-    // storeTotal(eachTotalTime())
   }
 
   const reset = () => {

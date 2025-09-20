@@ -3,6 +3,7 @@ import './Study.css'
 import Timer from "./Timer";
 import { styled } from '@mui/material/styles';
 import TimeField from "./TimeField";
+import { useNavigate } from "react-router-dom";
 
 const ONE_SECONDS = 1000;
 const ONE_MINUTES = 60000;
@@ -14,6 +15,7 @@ type Props = {
   studyTime: number
   restTime: number
   onOpenStudy: () => void
+  onOpenRecordConfirmModal: () => void
 }
 
 const Container = styled('div')({
@@ -41,8 +43,9 @@ const SetUpStudy = styled('div')({
   marginLeft: '10%'
 })
 
-export default function Study({studyTime, restTime, onOpenStudy}:Props){
+export default function Study({studyTime, restTime, onOpenStudy, onOpenRecordConfirmModal}:Props){
   const [ totalTime, setTotalTime ] = useState({'study':0, 'rest':0})
+  const navigate = useNavigate()
 
   const storeTotal = (data: any) => {
     setTotalTime(data)
@@ -57,10 +60,6 @@ export default function Study({studyTime, restTime, onOpenStudy}:Props){
       .map((val: any) => String(val).padStart(2, "0"))
       .join(":");
   };
-
-  const onSubmit = () => {
-    console.log(totalTime)
-  }
 
   return(
     <Container>
@@ -90,7 +89,7 @@ export default function Study({studyTime, restTime, onOpenStudy}:Props){
         </div> */}
         <div className="button">
           <button onClick={onOpenStudy}>詳細設定</button>
-          <button onClick={onSubmit}>登録する</button>
+          <button onClick={onOpenRecordConfirmModal}>終了</button>
         </div>
         </SetUpStudy>
       </SetUpCard>

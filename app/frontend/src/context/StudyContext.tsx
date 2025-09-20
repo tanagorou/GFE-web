@@ -12,7 +12,7 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
   const [nextTimeState, setNextTimeState] = useState('standby')
   const [restState, setRestState] = useState(false)
   const [pomodoreCount, setPomodoreCount] = useState({study: 0, rest: 0})
-  const [totalTime, setTotalTime] = useState({study: 0, rest: 0})
+  // const [totalTime, setTotalTime] = useState({study: 0, rest: 0})
   const timerIdRef = useRef<NodeJS.Timeout | undefined>(undefined)
   
 
@@ -32,6 +32,19 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
     }
   }
 
+  const culcurateTotalTime = () => {
+    // 必ずスタンバイ状態で計算
+    setNextTimeState('standby')
+    if(restState){
+      const study = pomodoreCount.study * studyTime
+      const rest = pomodoreCount.rest * restTime + (restTime - timerCount)
+      return {record: {work_time: study, rest_time: rest}}
+    }else{
+      const study = pomodoreCount.study * studyTime + (studyTime - timerCount)
+      const rest = pomodoreCount.rest * restTime
+      return {record: {work_time: study, rest_time: rest}}
+    }
+  }
 
   // 初期値にstudyTimerをセット。
   useEffect(() => {
@@ -59,7 +72,19 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
   },[nextTimeState, timerCount])
 
   return (
-    <StudyTimeContext.Provider value={{studyTime, setStudyTime, restTime, setRestTime, nextTimeState, setNextTimeState, timerCount, setTimerCount, restState, setRestState}}>
+    <StudyTimeContext.Provider 
+      value={{studyTime,
+              setStudyTime,
+              restTime,
+              setRestTime,
+              nextTimeState,
+              setNextTimeState,
+              timerCount,
+              setTimerCount,
+              restState,
+              setRestState,
+              culcurateTotalTime
+              }}>
       {children}
     </StudyTimeContext.Provider>
   )
