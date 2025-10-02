@@ -22,6 +22,8 @@ export default function StudyPage() {
   const navigate = useNavigate();
   const background = (location.state as BackgroundLocation)?.background;
 
+  console.log(location)
+
   const openStudyModal = () => {
     navigate('/study/modal_study', { state: {background: location}})
   }

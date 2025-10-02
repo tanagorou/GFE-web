@@ -3,9 +3,16 @@
   width: min(560px, 92vw);
   max-height: 90vh;
   padding: 1em;
-  background: white;
+  background: #ffffff;
   border-radius: 8px;
   overflow: auto;
+  transform: translateY(0) scale(0.98);
+  opacity: 0;
+  animation: cardIn 180ms ease-out forwards;
+}
+
+@keyframes cardIn {
+  to { transform: translateY(0) scale(1.1); opacity: 1; }
 }
 
 .overlay {

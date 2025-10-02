@@ -95,10 +95,10 @@ export const StudyRecordList = () => {
       <div style={{display: 'flex', flex: '0 0 60%'}}>
         <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
           <div style={{display: 'flex', flexDirection: 'row', padding: '23px 20px 0 20px'}}>
-            <Card title="今日の勉強時間" time={displayTime.day.hour + displayTime.day.minute} />
-            <Card title="今週の勉強時間" time={displayTime.week.hour + displayTime.week.minute} />
-            <Card title="今月の勉強時間" time={displayTime.month.hour + displayTime.month.minute} />
-            <Card title="合計勉強時間" time={displayTime.total.hour + displayTime.total.minute} />
+            <Card title="今日の勉強時間" time={displayTime.day} />
+            <Card title="今週の勉強時間" time={displayTime.week} />
+            <Card title="今月の勉強時間" time={displayTime.month} />
+            <Card title="合計勉強時間" time={displayTime.total} />
           </div>
           <div style={{padding: '10px 23px 8px 23px'}}>
             <FormatterDemo />
