@@ -1,14 +1,15 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { Navbar } from "./Navbar/Index";
+import "./Layout.css";
 
 export default function Layout(){
   return(
-    <div style={{'minHeight': '100vh'}}>
+    <div className="fullheight">
       <Navbar />
-      <div style={{flex: 1, display: "flex"}}>
+      <div style={{height: '92%', flex: 1, display: "flex"}}>
         <Sidebar />
-        <div style={{ flex: 1, padding: "20px" }}>
+        <div style={{ flex: 1 }}>
           <Outlet />
         </div>
       </div>

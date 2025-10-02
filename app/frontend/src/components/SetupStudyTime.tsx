@@ -7,10 +7,10 @@ const ONE_HOURS = 3600000;
 const MAX_COUNT = 86400000;
 const MIN_COUNT = 0;
 
-type studeTimerProps = {
-  show?: boolean;
-  setShow?: React.Dispatch<React.SetStateAction<boolean>>;
-};
+// type studeTimerProps = {
+//   show?: boolean;
+//   setShow?: React.Dispatch<React.SetStateAction<boolean>>;
+// };
 
 type Props = {
   onChangeTime: (v:number) => void

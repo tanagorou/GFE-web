@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 type AuthContextType = {
   // isAuthenticated: boolean
   // token: string | null
+  authToken: Record<string, any>
   login: (token: string) => void
   logout: () => void
   // getToken: () => string | null
@@ -23,7 +24,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
   const location = useLocation()
   // const [currentUser, setCurrentUser] = useState<string | null>(null)
 
-  const [authToken, setAuthToken] = useState({user:{current: null}, auth: {token: null, expires: 0, payload: {}}})
+  const [authToken, setAuthToken] = useState({user:{current: ''}, auth: {token: '', expires: 0, payload: {}}})
 
   // useEffect(() => {
   //   const query = new URLSearchParams(window.location.search)
@@ -67,6 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
           setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
         } catch (err){
           console.log(err)
+          navigate('/signin')
         }
       })()
     }
@@ -92,10 +94,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
         )
         const data = respone.data
         setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
-      } catch {(err: any) => {
+      } catch (err){
         console.log('リフレッシュトークンの有効期限が切れました。',err)
         navigate('/signin')
-      }}
+      }
     })()
   }, []);
 
@@ -111,13 +113,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
   }
 
   const logout = () => {
-    setAuthToken({user:{current: null}, auth: {token: null, expires: 0, payload: {}}})
+    setAuthToken({user:{current: ''}, auth: {token: '', expires: 0, payload: {}}})
   }
 
   // const getToken = () => token
   
   return (
-    <AuthContext.Provider value={{ login, logout}}>
+    <AuthContext.Provider value={{authToken, login, logout}}>
       {children}
     </AuthContext.Provider>
   )

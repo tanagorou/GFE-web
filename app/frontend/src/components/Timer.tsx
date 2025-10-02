@@ -10,18 +10,33 @@ import { useStudyTime } from '../context/StudyContext';
 
 
 const TimerContainer = styled('div')({
+  height: '100%',
   display: 'flex',
-  minHeight: '92vh',
+  // height: '100%',
+  // width: '100%',
+  // backgroundColor: 'red',
   flexDirection: 'column'
 })
 
 const TimerCircle = styled('div')({
-  flex: '1',
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginTop: '20px'
+  flex: '1 1 70%',
+  // width: '100%',
+  // height: '60%',
+  // backgroundColor: 'blue',
+  // alignItems: 'center',
+  // justifyContent: 'center',
+  // paddingTop: '5%'
 })
+
+const TimerButton = styled('div')({
+  flex: 1,
+  // backgroundColor: 'green',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+})
+
 
 
 const ONE_SECONDS = 1000;
@@ -65,24 +80,17 @@ export default function Timer({timeData, storeTotal}: timerProps){
   }
 
   return(
-    <TimerContainer>
-      <TimerCircle>
-        <CircularProgress 
-          totalMs={ restState ? restTime : studyTime } 
-          remainingMs={ timerCount }
-          />
+    <TimerContainer className='TimerContainer'>
+      <TimerCircle className='TimerCircle'>
+        <CircularProgress totalMs={studyTime} remainingMs={timerCount} />
       </TimerCircle>
-        <Grid container direction='row' sx={{  flex: '1',justifyContent: 'center', alignItems: 'flex-start', gap: 6}}>
-          <IconButton onClick={() => start()} >
-            <PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 100}}/>
-          </IconButton>
-          <IconButton onClick={() => stop()}>
-            <StopCircleOutlinedIcon sx={{fontSize: 100}}/>
-          </IconButton>
-          <IconButton onClick={() => reset()}>
-            <RotateLeftOutlinedIcon sx={{fontSize: 100}}/>
-          </IconButton>
-      </Grid>
+      <div className='TimerButtonContainer' style={{flex: '1 1 30%'}}>
+        <TimerButton className='TimerButton'>
+          <IconButton onClick={() => start()}><PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 'clamp(40px, 8vw, 90px)'}}/></IconButton>
+          <IconButton onClick={() => stop()}><StopCircleOutlinedIcon sx={{fontSize: 'clamp(40px, 8vw, 90px)'}}/></IconButton>
+          <IconButton onClick={() => reset()}><RotateLeftOutlinedIcon sx={{fontSize: 'clamp(40px, 8vw, 90px)'}}/></IconButton>
+        </TimerButton>
+      </div>
     </TimerContainer>
   )
 }

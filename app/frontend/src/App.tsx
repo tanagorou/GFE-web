@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+
 import SignUp from './components/signup/SignUp';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import Index from './pages/Index';
@@ -44,11 +44,11 @@ import AppRoutes from './routes';
 
 function App(){
   return (
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <AppRoutes />
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
   )
 }
 

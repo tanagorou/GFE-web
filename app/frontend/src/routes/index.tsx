@@ -6,6 +6,7 @@ import Layout from "../layouts/Layout";
 import StudyPage from "../pages/StudyPage";
 import Logout from "../components/logout/Logout";
 import { StudyTimeProvider } from "../context/StudyContext";
+import { StudyRecordList } from "../components/StudyRecordList";
 
 
 export default function AppRoutes(){
@@ -23,6 +24,7 @@ export default function AppRoutes(){
           <Route path="/" element={<Layout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/study/*" element={<StudyPage/>}/>
+            <Route path="/study_record_list" element={<StudyRecordList/>}/>
           </Route>
         </Route>
       </Routes>

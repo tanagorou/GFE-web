@@ -1,5 +1,7 @@
 import { relative } from "path"
 import { useMemo } from "react"
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 const ONE_SECONDS = 1000;
 const ONE_MINUTES = 60000;
@@ -18,12 +20,16 @@ type CircularProgressProps = {
 export default function CircularProgress({
   totalMs,
   remainingMs,
-  size = 700,
+  size = 90,
   strokeWidth = 5,
   showLabel = true,
   label,
   trackOpacity = 0.1
 }: CircularProgressProps){
+  // const theme = useTheme();
+  // const isScreen = useMediaQuery(theme.breakpoints.up('xl'))
+  // const size = isScreen ? 700 : 400;
+
   const progress = useMemo(() => {
     if(totalMs <= 0){
       return 0
@@ -47,8 +53,8 @@ export default function CircularProgress({
   };
 
   return(
-    <div style={{width: size, height: size, position: 'relative'}}>
-      <svg width={size} height={size} viewBox={`0 0 ${viewBox} ${viewBox}`}>
+    <div className='CircularProgress' style={{ width: '100%', height: '100%', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
+      <svg width={75 + '%'} height={75 + '%'} viewBox={`0 0 ${viewBox} ${viewBox}`}>
         <g transform={`rotate(-90 ${viewBox/2} ${viewBox/2})`}>
           {/* 背景トラック */}
           <circle
@@ -84,7 +90,7 @@ export default function CircularProgress({
             display: 'grid',
             placeItems: 'center',
             fontWeight: 600,
-            fontSize: '70px',
+            fontSize: 'clamp(30px, 5vw, 70px)',
             fontVariantNumeric: "tabular-nums",
             userSelect: "none"
           }}

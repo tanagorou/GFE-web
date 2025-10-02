@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useAuth } from "../context/AuthContext"
 import { Card } from "./Card"
 import { styled } from '@mui/material/styles';
+import FormatterDemo from "./GraphStudy"
 
 const ContainerLeft = styled('div')({
   display: 'flex',
@@ -10,8 +11,20 @@ const ContainerLeft = styled('div')({
   flex: '0 0 60%',
 })
 
+const CardContainer = styled('div')({
+  flexWrap: 'wrap',
+  flexDirection: 'row',
+  flex: '0 0 40%',
+})
+
 const ContainerRight = styled('div')({
   flex: '0 0 40%',
+})
+
+const ChartContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  flex: '0 0 60%',
 })
 
 const ONE_HOURS = 60; // 60分
@@ -78,16 +91,23 @@ export const StudyRecordList = () => {
   if(!ready || !displayTime) return <div>Loading...</div>
 
   return (
-    <div style={{display: 'flex'}}>
-      <ContainerLeft>
-        <Card title='今日' time={{...displayTime.day}}/>
-        <Card title='週' time={{...displayTime.week}}/>
-        <Card title='月' time={{...displayTime.month}}/>
-        <Card title='合計' time={{...displayTime.total}}/>
-      </ContainerLeft>
-      <ContainerRight>
-        <h1>Study Record List</h1>
-      </ContainerRight>
+    <div style={{display: 'flex', minHeight: '92vh'}}>
+      <div style={{display: 'flex', flex: '0 0 60%'}}>
+        <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+          <div style={{display: 'flex', flexDirection: 'row', padding: '23px 20px 0 20px'}}>
+            <Card title="今日の勉強時間" time={displayTime.day.hour + displayTime.day.minute} />
+            <Card title="今週の勉強時間" time={displayTime.week.hour + displayTime.week.minute} />
+            <Card title="今月の勉強時間" time={displayTime.month.hour + displayTime.month.minute} />
+            <Card title="合計勉強時間" time={displayTime.total.hour + displayTime.total.minute} />
+          </div>
+          <div style={{padding: '10px 23px 8px 23px'}}>
+            <FormatterDemo />
+          </div>
+        </div>
+      </div>          
+      <div style={{flex: '0 0 40%'}}>
+        <FormatterDemo />
+      </div>
     </div>
   )
 }
