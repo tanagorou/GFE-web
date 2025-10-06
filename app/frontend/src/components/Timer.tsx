@@ -86,9 +86,9 @@ export default function Timer({timeData, storeTotal}: timerProps){
       </TimerCircle>
       <div className='TimerButtonContainer' style={{flex: '1 1 30%'}}>
         <TimerButton className='TimerButton'>
-          <IconButton onClick={() => start()}><PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 'clamp(40px, 8vw, 90px)'}}/></IconButton>
-          <IconButton onClick={() => stop()}><StopCircleOutlinedIcon sx={{fontSize: 'clamp(40px, 8vw, 90px)'}}/></IconButton>
-          <IconButton onClick={() => reset()}><RotateLeftOutlinedIcon sx={{fontSize: 'clamp(40px, 8vw, 90px)'}}/></IconButton>
+          <IconButton onClick={() => start()}><PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 'clamp(30px, 7vw, 80px)'}}/></IconButton>
+          <IconButton onClick={() => stop()}><StopCircleOutlinedIcon sx={{fontSize: 'clamp(30px, 7vw, 80px)'}}/></IconButton>
+          <IconButton onClick={() => reset()}><RotateLeftOutlinedIcon sx={{fontSize: 'clamp(30px, 7vw, 80px)'}}/></IconButton>
         </TimerButton>
       </div>
     </TimerContainer>

@@ -49,17 +49,20 @@ export default function SetupStudyTime({ onChangeTime, onNext, onClose }: Props)
     onNext();
   };
 
-  // ちょい便利：キーボード操作（↑↓で分、左右で秒、Shiftで時間）
+  // キーボード操作（↑↓で分、左右で秒、Shiftで時間）
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const shift = e.shiftKey;
-      if (e.key === "ArrowUp") plus(shift ? ONE_HOURS : ONE_MINUTES);
-      if (e.key === "ArrowDown") minus(shift ? ONE_HOURS : ONE_MINUTES);
-      if (e.key === "ArrowRight") plus(ONE_SECONDS);
-      if (e.key === "ArrowLeft") minus(ONE_SECONDS);
-      if (e.key.toLowerCase() === "r") reset();
-      if (e.key === "Enter") handleChange();
-      if (e.key === "Escape") onClose();
+      if(e.key === "ArrowUp") plus(shift ?ONE_HOURS : ONE_MINUTES)
+      if(e.key === "ArrowDown") minus(shift ?ONE_HOURS : ONE_MINUTES)
+      if(e.key === "ArrowRight") plus(ONE_SECONDS)
+      if(e.key === "ArrowLeft") minus(ONE_SECONDS)
+
+      // 2025/10/06][追記]  コンポーネントの再描画で、Enter（Escape）キー一発で戻らない。
+      // 今後は使いやすくしたいので、この操作を入れれるようになりたいね
+
+      // if(e.key === "Enter") handleChange()
+      // if(e.key === "Escape") onClose()
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -72,7 +75,7 @@ export default function SetupStudyTime({ onChangeTime, onNext, onClose }: Props)
           <TitleWrap>
             <AccessTimeOutlinedIcon style={{ fontSize: 22, color: 'rgba(13, 56, 136, 0.31)'}} />
             <Title>作業時間</Title>
-            <Subtitle>↑↓で分（Shift+↑↓で時間）／←→で秒　Enterで決定</Subtitle>
+            <Subtitle>↑↓で分（Shift+↑↓で時間）／←→で秒</Subtitle>
           </TitleWrap>
           <IconGhostBtn onClick={onClose} aria-label="閉じる">
             <CloseRoundedIcon />
@@ -121,15 +124,9 @@ export default function SetupStudyTime({ onChangeTime, onNext, onClose }: Props)
           <ResetBtn onClick={reset} aria-label="リセット">
             <RestartAltRoundedIcon />
           </ResetBtn>
-          {/* <Secondary onClick={onClose}>閉じる</Secondary> */}
           
-          <Primary onClick={() => handleNext()}>
-            次へ
-          </Primary>
-          <Primary onClick={() => handleChange()}>
-            設定する
-          </Primary>
-
+          <Primary onClick={() => handleNext()}>次へ</Primary>
+          <Primary onClick={() => handleChange()}>設定する</Primary>
         </Actions>
       </Card>
     </Overlay>
