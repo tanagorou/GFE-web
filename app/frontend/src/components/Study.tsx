@@ -178,6 +178,7 @@ type Props = {
   studyTime: number
   restTime: number
   onOpenStudy: () => void
+  onOpenRest: () => void
   onOpenRecordConfirmModal: () => void
 }
 
@@ -204,7 +205,7 @@ const TimeCard = styled('div')({
 //   height: '100%'
 // })
 
-export default function Study({studyTime, restTime, onOpenStudy, onOpenRecordConfirmModal}:Props){
+export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onOpenRecordConfirmModal}:Props){
   const [ totalTime, setTotalTime ] = useState({'study':0, 'rest':0})
   const navigate = useNavigate()
 
@@ -257,7 +258,7 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRecordCon
           </Stat>
 
           <Stat>
-            <LabelPillRest type="button" onClick={handle}>
+            <LabelPillRest type="button" onClick={() => onOpenRest()}>
               <FreeBreakfastOutlinedIcon style={{ fontSize: 16 }} />
               休憩時間
             </LabelPillRest>

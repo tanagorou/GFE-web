@@ -28,6 +28,10 @@ export default function StudyPage() {
     navigate('/study/modal_study', { state: {background: location}})
   }
 
+  const openRestModal = () => {
+    navigate('/study/modal_rest', { state: {background: location}})
+  }
+
   const openRecordConfirmModal = () => {
     navigate('/study/modal_record_confirm', { state: {background: location}})
   }
@@ -40,13 +44,13 @@ export default function StudyPage() {
   return (
     <>
       <Routes location={background || location}>
-        <Route index element={<Study studyTime={studyTime} restTime={restTime} onOpenStudy={openStudyModal} onOpenRecordConfirmModal={openRecordConfirmModal}/>}/>
+        <Route index element={<Study studyTime={studyTime} restTime={restTime} onOpenStudy={openStudyModal} onOpenRest={openRestModal} onOpenRecordConfirmModal={openRecordConfirmModal}/>}/>
         <Route path="modal_study" element={<SetupStudyTime onChangeTime={setStudyTime} onNext={() => navigate('/study/modal_rest',{ state:{ background }})} onClose={closeModal}/>} />
       </Routes>
       {background && (
         <Routes>
           <Route path="modal_study" element={<SetupStudyTime onChangeTime={setStudyTime} onNext={() => navigate('/study/modal_rest',{ state:{ background }})} onClose={closeModal}/>}/>
-          <Route path="modal_rest" element={<SetupRestTime onChangeTime={setRestTime} onClose={closeModal}/>}/>
+          <Route path="modal_rest" element={<SetupRestTime onChangeTime={setRestTime} onBack={() => navigate('/study/modal_study',{ state:{ background }})} onClose={closeModal}/>}/>
           <Route path="modal_record_confirm" element={<RecordConfirmModal closeModal={closeModal}/>}/>
         </Routes>
       )}
