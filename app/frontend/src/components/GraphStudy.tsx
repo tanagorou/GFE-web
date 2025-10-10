@@ -2,8 +2,9 @@ import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import Link from '@mui/material/Link';
+import { useTheme } from '@mui/material/styles';
 
 
 const Card = styled('div')({
@@ -108,17 +109,38 @@ const dataset = [
   },
 ];
 
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xl: 1536,
+      lg: 1200,
+      md: 900,
+      sm: 600,
+      xs: 300,
+  }
+}
+});
+
 const valueFormatter = (value: number | null) => `${value}mm`;
 
 export default function FormatterDemo() {
   const theme = useTheme();
-  const isScreen = useMediaQuery(theme.breakpoints.up('xl'))
-  const charHeight = isScreen ? 850 : 420;
+
+  const isXs = useMediaQuery(theme.breakpoints.down('xs')) // 300
+  const isSm = useMediaQuery(theme.breakpoints.between('sm','md')) // 600 ~ 900
+  const isMd = useMediaQuery(theme.breakpoints.between('md','lg')) // 900 ~ 1200
+  const isLg = useMediaQuery(theme.breakpoints.between('lg','xl')) // 1200 ~ 1536
+  const isXl = useMediaQuery(theme.breakpoints.up('xl')) // 1536 ~
+
+  const height = isXl ? 700 : isLg ? 550 : isMd ? 450 : isSm ? 400 : isXs ? 300 : 250;
+  const width = isXl ? 1000 : isLg ? 850 : isMd ? 750 : isSm ? 700 : isXs ? 600 : 500;
+
+  console.log(height, width)
 
   return (
-    <Card>
       <BarChart
-      height={charHeight}
+      height={height}
+      width={width}
       dataset={dataset}
       xAxis={[
         {
@@ -134,28 +156,5 @@ export default function FormatterDemo() {
       series={[{ dataKey: 'seoul', label: 'Seoul rainfall', valueFormatter }]}
         {...otherSetting}
       />
-      <div style={{display: 'flex', justifyContent: 'flex-end', padding: '20px'}}>
-      <Link
-        component="button"
-        variant="body2"
-        onClick={() => {
-          console.info("I'm a button.");
-          navigate('/signup')
-        }}
-        >
-        一週間前
-        </Link>
-        <Link
-        component="button"
-        variant="body2"
-        onClick={() => {
-          console.info("I'm a button.");
-          navigate('/signup')
-        }}
-        >
-        一週間後
-        </Link>
-      </div>
-    </Card>
   );
 }

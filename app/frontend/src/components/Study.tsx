@@ -7,6 +7,7 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
 import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 // …既存の定数・Propsなどはそのまま…
 
 const SetUpCard = styled('div')({

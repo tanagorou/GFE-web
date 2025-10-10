@@ -1,8 +1,11 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useAuth } from "../context/AuthContext"
-import { Card } from "./Card"
+import { CardRecorder } from "./Card"
 import { styled } from '@mui/material/styles';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
+import WavingHandIcon from '@mui/icons-material/WavingHand';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import FormatterDemo from "./GraphStudy"
 
 const ContainerLeft = styled('div')({
@@ -25,6 +28,113 @@ const ChartContainer = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   flex: '0 0 60%',
+  padding: 20
+})
+
+const Container = styled('div')({
+  padding: 20,
+  minHeight: '92vh',
+  width: '100%',
+  margin: 0
+})
+
+const Header = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+  marginBottom: 12,
+})
+
+const TitleWrap = styled('div')({
+  display: 'flex',
+  alignItems: 'baseline',
+  gap: 12,
+})
+
+const TitleIcon = styled('div')({
+  width: 'clamp(30px, 2.6vw, 35px)',
+})
+
+const CommonTitle = styled('h3')({
+  margin: 0,
+  fontSize: 'clamp(16px, 1.6vw, 18px)',
+  fontWeight: 800,
+  color: '#696969',
+  letterSpacing: '.02em',
+})
+
+ const Title = styled('h3')({
+  margin: 0,
+  fontSize: 'clamp(18px, 2.3vw, 24px)',
+  fontWeight: 800,
+  color: '#000000',
+  letterSpacing: '.02em',
+  marginBottom: 12,
+ })
+
+const Card = styled('div')({
+  width: '100%',
+  padding: 20,
+  borderRadius: 10,
+  boxShadow: '0 10px 24px rgba(2, 6, 23, 0.06)',
+  border: '1px solid rgba(15, 23, 42, .08)',
+})
+
+const DisplayRecord = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(4, 1fr)',
+  gap: 12,
+  marginBottom: 25,
+})
+
+const RecordItem = styled('div')({
+  width: '100%',
+  padding: 12,
+  borderRadius: 10,
+  boxShadow: '0 3px 6px rgba(2, 6, 23, 0.06)',
+  border: '1px solid rgba(15, 23, 42, .08)',
+})
+
+const ItemTitle = styled('div')({
+  fontSize: 12,
+  color: '#0f172a',
+  fontWeight: 600,
+  marginBottom: 4,
+})
+
+const ItemValue = styled('div')({
+  marginTop: 12,
+  display: 'flex',
+  alignItems: 'baseline',
+  justifyContent: 'center',
+  fontSize: 'clamp(18px, 2.2vw, 26px)',
+  color: '#0f172a',
+  fontWeight: 650,
+  marginBottom: 8,
+  '& p': {
+    fontSize: 'clamp(12px, 1.2vw, 14px)',
+  }
+})
+
+
+const GraphContainer = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  borderRadius: 10,
+  boxShadow: '0 3px 6px rgba(2, 6, 23, 0.06)',
+  border: '1px solid rgba(15, 23, 42, .08)',
+  transition: 'box-shadow 160ms ease, transform 160ms ease',
+  '&:hover': {
+    boxShadow: '0 14px 30px rgba(2, 6, 23, 0.10)',
+    transform: 'translateY(-1px)',
+  }
+})
+
+const GraphItem = styled('div')({
+  width: '70%',
+  padding: '20px 0px 4px 0px',
 })
 
 const ONE_HOURS = 60; // 60分
@@ -50,6 +160,20 @@ type Display = {
   week: Time,
   month: Time,
   total: Time
+}
+
+const formatTimeToDisplay = (time: Time) => {
+  return (
+    <>
+      {time.hour && <span>{time.hour}</span>}
+      {time.hour && <p>時間</p>}
+      {time.minute && <span>{time.minute}</span>}
+      {time.minute && <p>分</p>}
+
+      {!time.hour && !time.minute && <span>0</span>}
+      {!time.hour && !time.minute && <p>時間</p>}
+    </>
+  )
 }
 
 export const StudyRecordList = () => {
@@ -91,23 +215,50 @@ export const StudyRecordList = () => {
   if(!ready || !displayTime) return <div>Loading...</div>
 
   return (
-    <div style={{display: 'flex', minHeight: '92vh'}}>
-      <div style={{display: 'flex', flex: '0 0 60%'}}>
-        <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
-          <div style={{display: 'flex', flexDirection: 'row', padding: '23px 20px 0 20px'}}>
-            <Card title="今日の勉強時間" time={displayTime.day} />
-            <Card title="今週の勉強時間" time={displayTime.week} />
-            <Card title="今月の勉強時間" time={displayTime.month} />
-            <Card title="合計勉強時間" time={displayTime.total} />
-          </div>
-          <div style={{padding: '10px 23px 8px 23px'}}>
-            <FormatterDemo />
-          </div>
-        </div>
-      </div>          
-      <div style={{flex: '0 0 40%'}}>
-        <FormatterDemo />
-      </div>
-    </div>
+      <Container>
+        <Header>
+          <TitleWrap>
+            <WavingHandIcon style={{ color: 'rgba(7, 83, 21, 0.31)'}} />
+            <CommonTitle>お疲れ様です。ひなのさん</CommonTitle>
+          </TitleWrap>
+        </Header>
+        <Card>
+          <TitleWrap>
+            <AutoStoriesIcon style={{ color: 'rgba(14, 164, 233, 0.8)'}} />
+            <Title>勉強記録</Title>
+          </TitleWrap>
+          <DisplayRecord>
+            <RecordItem>
+              <ItemTitle>今日</ItemTitle>
+              <ItemValue>
+                  {formatTimeToDisplay(displayTime.day)}
+              </ItemValue>
+            </RecordItem>
+            <RecordItem>
+              <ItemTitle>今週</ItemTitle>
+              <ItemValue>{formatTimeToDisplay(displayTime.week)}</ItemValue>
+            </RecordItem>
+            <RecordItem>
+              <ItemTitle>今月</ItemTitle>
+              <ItemValue>{formatTimeToDisplay(displayTime.month)}</ItemValue>
+            </RecordItem>
+            <RecordItem>
+              <ItemTitle>合計</ItemTitle>
+              <ItemValue>{formatTimeToDisplay(displayTime.total)}</ItemValue>
+            </RecordItem>
+          </DisplayRecord>
+          <div />
+          
+          <TitleWrap>
+            <EqualizerIcon style={{ color: 'rgba(14, 164, 233, 0.8)'}} />
+            <Title>記録グラフ</Title>
+          </TitleWrap>
+          <GraphContainer>
+            <GraphItem>
+              <FormatterDemo />
+            </GraphItem>
+          </GraphContainer>
+        </Card>
+      </Container>
   )
 }

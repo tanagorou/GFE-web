@@ -43,7 +43,7 @@ type time = {
   minute: string
 }
 
-export const Card = ({title='今日', time={hour: '9', minute: '35'}}: CardProps) => {
+export const CardRecorder = ({title='今日', time={hour: '9', minute: '35'}}: CardProps) => {
   console.log('カードが表示されました')
   console.log(time)
   return (

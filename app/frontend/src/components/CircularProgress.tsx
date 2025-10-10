@@ -89,8 +89,8 @@ export default function CircularProgress({
             inset: 0,
             display: 'grid',
             placeItems: 'center',
-            fontWeight: 600,
-            fontSize: 'clamp(30px, 5vw, 70px)',
+            fontWeight: 700,
+            fontSize: 'clamp(12px, 4.8vw, 65px)',
             fontVariantNumeric: "tabular-nums",
             userSelect: "none"
           }}

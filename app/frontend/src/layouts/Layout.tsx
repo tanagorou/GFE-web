@@ -7,9 +7,9 @@ export default function Layout(){
   return(
     <div className="fullheight">
       <Navbar />
-      <div style={{height: '92%', flex: 1, display: "flex"}}>
+      <div style={{height: '92%',display: "flex"}}>
         <Sidebar />
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, overflowY: 'auto' }}>
           <Outlet />
         </div>
       </div>

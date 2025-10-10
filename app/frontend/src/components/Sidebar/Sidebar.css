@@ -5,9 +5,11 @@
 }
 
 .Sidebar {
+  position: sticky;
   height: 100%;
   width: 28vh;
   background-color: #469CBA;
+
 }
 
 .SidebarList {
