@@ -12,11 +12,15 @@ Rails.application.routes.draw do
   #   omniauth_callbacks: 'users/omniauth_callbacks'
   # }
 
+  get 'auth/:provider/callback', to: 'sessions#create'
+  
   namespace :api, default: { format: :json } do
     namespace :v1 do
       resources :users, only: [:index]
 
       resources :sign_up, only: [:create]
+
+      resources :study_records, only: [:create, :index]
       
       resources :auth_token, only: [:create] do
         post :refresh, on: :collection

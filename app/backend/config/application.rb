@@ -8,6 +8,8 @@ Bundler.require(*Rails.groups)
 
 module App
   class Application < Rails::Application
+    config.time_zone = 'Tokyo'
+    config.active_record.default_timezone= :local
 
     # 追記：CORSエラー解消
     # config.middleware.insert_before 0, Rack::Cors do
@@ -22,7 +24,8 @@ module App
     # end
     # ここまで
 
-
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
