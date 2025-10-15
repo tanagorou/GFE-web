@@ -20,7 +20,9 @@ Rails.application.routes.draw do
 
       resources :sign_up, only: [:create]
 
-      resources :study_records, only: [:create, :index]
+      resources :study_records, only: [:create, :index] do
+        get :search, on: :collection
+      end
       
       resources :auth_token, only: [:create] do
         post :refresh, on: :collection

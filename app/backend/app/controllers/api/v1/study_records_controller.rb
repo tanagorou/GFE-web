@@ -13,9 +13,6 @@ class Api::V1::StudyRecordsController < ApplicationController
   end
 
   def index
-    week_offset = params[:week_offset].to_i || 0
-    puts week_offset
-
     # 今日の勉強時間
     day_records = StudyRecord.new.get_today_work_records(current_user.id)
 
@@ -29,7 +26,7 @@ class Api::V1::StudyRecordsController < ApplicationController
     all_records = StudyRecord.new.sum_all_work_records(current_user.id)
 
     # その日ごとの勉強時間(グラフに表示)
-    each_day_study_time = StudyRecord.new.get_each_day_study_time(current_user.id, week_offset = week_offset)
+    each_day_study_time = StudyRecord.new.get_each_day_study_time(current_user.id)
 
     render json: { study_records: { day_records: day_records,
                                     week_records: week_records,
@@ -38,7 +35,12 @@ class Api::V1::StudyRecordsController < ApplicationController
                                     each_day_study_time: each_day_study_time}}
   end
 
-
+  # その週の勉強時間を取ってくる
+  def search
+    week_offset = params[:week_offset].to_i || 0
+    each_day_study_time = StudyRecord.new.get_each_day_study_time(current_user.id, week_offset = week_offset)
+    render json: { study_records: { each_day_study_time: each_day_study_time}}
+  end
 
   private
 
