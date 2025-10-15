@@ -7,6 +7,7 @@ import EqualizerIcon from '@mui/icons-material/Equalizer';
 import WavingHandIcon from '@mui/icons-material/WavingHand';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import FormatterDemo from "./GraphStudy"
+import { Link } from "react-router-dom"
 
 const ContainerLeft = styled('div')({
   display: 'flex',
@@ -137,6 +138,25 @@ const GraphItem = styled('div')({
   padding: '20px 0px 4px 0px',
 })
 
+const TransactionList = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginBottom: 18,
+})
+
+const GraphBtn = styled('button')({
+  backgroundColor: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: 20,
+  color: '#0f172a',
+  fontWeight: 600,
+  '&:hover': {
+    color: '#0ea5e9',
+    textDecoration: 'underline',
+  }
+})
+
 const ONE_HOURS = 60; // 60分
 const ONE_MINUTES = 1; // 1分
 
@@ -155,11 +175,17 @@ type Time = {
   minute: string
 }
 
+type GraphData = {
+  time: number,
+  date: string
+}
+
 type Display = {
   day: Time,
   week: Time,
   month: Time,
-  total: Time
+  total: Time,
+  eachDayStudyTime: GraphData[]
 }
 
 const formatTimeToDisplay = (time: Time) => {
@@ -176,10 +202,62 @@ const formatTimeToDisplay = (time: Time) => {
   )
 }
 
+const week = ['月', '火', '水', '木', '金', '土', '日']
+
+const getGraphData = (data: {studyTime: number, date: string}[]) => {
+  const graphData: {time: number, date: string}[] = []
+  data.forEach((item, index) => {
+    const dataDetail = {time:item.studyTime, date: item.date.split('-').join('/') + '/' + week[index]}
+    graphData.push(dataDetail)
+  })
+  console.log('graphData', graphData)
+  return graphData
+}
+
+
+
+
 export const StudyRecordList = () => {
   const [displayTime, setDisplayTime] = useState<Display | null>(null)
+  const [weekOffset, setWeekOffset] = useState<number>(0)
   const [ready, setReady] = useState<boolean>(false)
   const { authToken } = useAuth()
+
+  const handleWeekOffsetRight = () => {
+    setWeekOffset(weekOffset + 1)
+    const nextWeekOffset = weekOffset + 1
+    graphRecord(nextWeekOffset)
+  }
+
+  const handleWeekOffsetLeft = () => {
+    setWeekOffset(weekOffset - 1)
+    const nextWeekOffset = weekOffset - 1
+    graphRecord(nextWeekOffset)
+  }
+   
+
+
+  const graphRecord = async (weekOffset: number) => {
+    const response = await axios.get(
+      `http://localhost:3000/api/v1/study_records/search?week_offset=${weekOffset}`,
+      {
+        withCredentials: true,
+        headers: {
+          "Authorization": `Bearer ${authToken.auth.token}`,
+          "X-Requested-With": "XMLHttpRequest",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    console.log(response)
+    setDisplayTime((prev) => {
+      return {
+        ...prev,
+        eachDayStudyTime: getGraphData(response.data.studyRecords.eachDayStudyTime)
+      }
+    })
+  }
+
   useEffect(() => {
     const getStudyRecord = async () => {
       try {
@@ -199,11 +277,12 @@ export const StudyRecordList = () => {
           day: formatTime(response.data.studyRecords.dayRecords),
           week: formatTime(response.data.studyRecords.weekRecords),
           month: formatTime(response.data.studyRecords.monthRecords),
-          total: formatTime(response.data.studyRecords.allRecords)
+          total: formatTime(response.data.studyRecords.allRecords),
+          eachDayStudyTime: getGraphData(response.data.studyRecords.eachDayStudyTime)
         }
         setDisplayTime(d)
         setReady(true)
-        console.log(d.total)
+        console.log(d)
       } catch (err: any) {
         console.log(err.response.data)
       }
@@ -255,7 +334,15 @@ export const StudyRecordList = () => {
           </TitleWrap>
           <GraphContainer>
             <GraphItem>
-              <FormatterDemo />
+              <FormatterDemo dataset={displayTime.eachDayStudyTime}/>
+              <TransactionList>
+                <GraphBtn onClick={()=>handleWeekOffsetRight()}>
+                  xx
+                </GraphBtn>
+                <GraphBtn onClick={()=>handleWeekOffsetLeft()}>
+                  xx
+                </GraphBtn>
+              </TransactionList>
             </GraphItem>
           </GraphContainer>
         </Card>

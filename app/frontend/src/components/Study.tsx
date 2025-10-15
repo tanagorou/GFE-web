@@ -236,6 +236,7 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
               timeData={{ studyTime: studyTime, restTime: restTime}}
               totalTime={totalTime}
               storeTotal={storeTotal}
+              onOpenRecordConfirmModal={onOpenRecordConfirmModal}
             />
           </TimeCard>
         </div>

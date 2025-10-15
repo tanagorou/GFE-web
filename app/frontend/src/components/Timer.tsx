@@ -48,12 +48,13 @@ type timerProps = {
   timeData: Record<string, number>,
   totalTime: Record<string, number>,
   storeTotal: (v:any) => void
+  onOpenRecordConfirmModal: () => void
 }
 
 let completedTermsStudy = 0
 let completedTermsRest = 0
 
-export default function Timer({timeData, storeTotal}: timerProps){
+export default function Timer({timeData, storeTotal, onOpenRecordConfirmModal}: timerProps){
 
   const { studyTime, restTime, restState, setRestState,setNextTimeState, timerCount, setTimerCount, culcurateTotalTime} = useStudyTime()
 
@@ -66,6 +67,7 @@ export default function Timer({timeData, storeTotal}: timerProps){
 
   const stop = () => {
     setNextTimeState('standby')
+    onOpenRecordConfirmModal()
   }
 
   const reset = () => {

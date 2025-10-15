@@ -4,8 +4,7 @@ class StudyRecord < ApplicationRecord
   validates :work_seconds, presence: true,
                            numericality: { greater_than: 0}
 
-  validates :rest_seconds, presence: true,
-                           numericality: { greater_than: 0}
+  validates :rest_seconds, presence: true
 
   # 今日の勉強時間を記録
   def get_today_work_records(user_id)

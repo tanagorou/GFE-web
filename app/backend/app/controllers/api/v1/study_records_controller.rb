@@ -4,7 +4,7 @@ class Api::V1::StudyRecordsController < ApplicationController
 
   # 勉強時間を記録、現在はフロントエンドからmsで渡しているのでmに変換して保存する必要があります。
   def create
-    record = StudyRecord.new(format_record(get_parms))
+    record = current_user.study_records.new(format_record(get_parms))
     if record.save
       render json: { study_records: {work_seconds: record.work_seconds, rest_seconds: record.rest_seconds}}, status: :created
     else

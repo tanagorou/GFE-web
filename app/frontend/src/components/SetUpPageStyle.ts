@@ -14,10 +14,11 @@ export const Overlay = styled("div")({
 
 export const Card = styled("div")({
   width: "min(920px, 100%)",
-  borderRadius: 20,
+  borderRadius: 10,
   padding: "28px clamp(16px, 3vw, 40px)",
-  background:
-    "linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.86))",
+  // background:
+  //   "linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.86))",
+  background: "rgba(255, 255, 255, 0.98)",
   border: "1px solid rgba(15, 23, 42, .08)",
   boxShadow:
     "0 10px 30px rgba(2,6,23,.25), 0 1px 0 rgba(255,255,255,.6) inset",
