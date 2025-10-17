@@ -45,19 +45,16 @@ const ONE_HOURS = 3600000;
 
 
 type timerProps = {
-  timeData: Record<string, number>,
-  totalTime: Record<string, number>,
-  storeTotal: (v:any) => void
   onOpenRecordConfirmModal: () => void
 }
 
-let completedTermsStudy = 0
-let completedTermsRest = 0
-
-export default function Timer({timeData, storeTotal, onOpenRecordConfirmModal}: timerProps){
-
-  const { studyTime, restTime, restState, setRestState,setNextTimeState, timerCount, setTimerCount, culcurateTotalTime} = useStudyTime()
-
+export default function Timer({onOpenRecordConfirmModal}: timerProps){
+  const { studyTime,
+          restTime, 
+          restState, 
+          setNextTimeState, 
+          timerCount, 
+          setTimerCount } = useStudyTime()
 
   const start = () => {
     if(studyTime !== 0){
@@ -73,7 +70,6 @@ export default function Timer({timeData, storeTotal, onOpenRecordConfirmModal}: 
   const reset = () => {
     console.log('rest', restState)
     setNextTimeState('standby')
-    // setRestState(restState ? false : true) //リセットときに休憩かどうかの判定が逆転してしまうので修正
     if(restState){
       setTimerCount(restTime)
     } else {
@@ -84,7 +80,7 @@ export default function Timer({timeData, storeTotal, onOpenRecordConfirmModal}: 
   return(
     <TimerContainer className='TimerContainer'>
       <TimerCircle className='TimerCircle'>
-        <CircularProgress totalMs={studyTime} remainingMs={timerCount} />
+        <CircularProgress totalMs={restState ? restTime : studyTime} remainingMs={timerCount} />
       </TimerCircle>
       <div className='TimerButtonContainer' style={{flex: '1 1 30%'}}>
         <TimerButton className='TimerButton'>

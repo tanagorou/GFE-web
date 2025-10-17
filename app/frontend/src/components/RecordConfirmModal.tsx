@@ -5,6 +5,8 @@ import { useAuth } from "../context/AuthContext"
 import { Overlay, Card } from "./SetUpPageStyle";
 import { styled } from "@mui/material/styles";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import { useState } from "react"
+import { useSnackbar } from "notistack";1
 
 const Header = styled("div")({
   position: "relative",
@@ -19,6 +21,15 @@ const Title = styled("h3")({
   fontWeight: 700,
   color: "#0f172a",
   letterSpacing: ".02em",
+})
+
+const ErrorMessage = styled('div')({
+  color: 'rgba(220, 38, 38, 0.76)',
+  fontSize: '14px',
+  fontWeight: 600,
+  letterSpacing: '.02em',
+  marginTop: '12px',
+  textAlign: 'center',
 })
 
 const CloseIcon = styled(CloseRoundedIcon)({
@@ -117,15 +128,17 @@ const formatTime = (msSeconds: number) => {
   return displayTime.join('')
 }
 
+
 // 勉強時間、作業時間を保存
 export const RecordConfirmModal = ({closeModal}: RecordConfirmModalProps) => {
-  const {culcurateTotalTime} = useStudyTime()
+  const {culcurateTotalTime, resetRecords} = useStudyTime()
+  const {authToken} = useAuth()
+  const {enqueueSnackbar} = useSnackbar()
+  
+  const [error, setError] = useState(false)
   const totalTime = culcurateTotalTime()
 
-  const {authToken} = useAuth()
-
   async function regsterRecord() {
-    const totalTime = culcurateTotalTime()
     try {
       const response = await axios.post(
         'http://localhost:3000/api/v1/study_records',
@@ -139,24 +152,19 @@ export const RecordConfirmModal = ({closeModal}: RecordConfirmModalProps) => {
           },
         }
       )
-      console.log('response:',response)
+      enqueueSnackbar('記録が保存されました', {variant: 'success'})
+      resetRecords()
+      closeModal()
     } catch (error) {
-      console.log('error:',error)
+      setError(true)
     }
   }
-
   const handleSubmit = () => {
     regsterRecord()
-    closeModal()
   }
-
   const handleCloseModal = () => {
     closeModal()
   }
-
-  const workTime = formatTime(totalTime.record.work_time)
-  const restTime = formatTime(totalTime.record.rest_time)
-  console.log('totalTime:',totalTime)
   return (
     <Overlay>
       <Card style={{width: 'min(560px, 92vw)'}}>
@@ -168,20 +176,17 @@ export const RecordConfirmModal = ({closeModal}: RecordConfirmModalProps) => {
         </Header>
         <Stat style={{borderTop: 'none'}}>
           <Label>勉強時間</Label>
-          <TimeText>{workTime}</TimeText>
+          <TimeText>{formatTime(totalTime.record.work_time)}</TimeText>
         </Stat>
         <Stat>
           <Label>休憩時間</Label>
-          <TimeText>{restTime}</TimeText>
+          <TimeText>{formatTime(totalTime.record.rest_time)}</TimeText>
         </Stat>
+        {error && <ErrorMessage>作業時間0秒では保存できません</ErrorMessage>}
         <BtnWrap>
           <SubmitBtn onClick={() => handleSubmit()}>保存する</SubmitBtn>
         </BtnWrap>
-        
         <Hint>ページを閉じても記録は破棄されません</Hint>
-{/* 
-        <button onClick={closeModal}>close</button>
-        <button onClick={() =>handleSubmit()}>登録する</button> */}
       </Card>
     </Overlay>
   )

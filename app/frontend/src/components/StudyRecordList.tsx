@@ -251,6 +251,7 @@ export const StudyRecordList = () => {
     )
     console.log(response)
     setDisplayTime((prev) => {
+      if(!prev) return null
       return {
         ...prev,
         eachDayStudyTime: getGraphData(response.data.studyRecords.eachDayStudyTime)

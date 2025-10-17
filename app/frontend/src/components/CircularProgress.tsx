@@ -1,7 +1,5 @@
-import { relative } from "path"
 import { useMemo } from "react"
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import { useStudyTime } from "../context/StudyContext";
 
 const ONE_SECONDS = 1000;
 const ONE_MINUTES = 60000;
@@ -26,10 +24,7 @@ export default function CircularProgress({
   label,
   trackOpacity = 0.1
 }: CircularProgressProps){
-  // const theme = useTheme();
-  // const isScreen = useMediaQuery(theme.breakpoints.up('xl'))
-  // const size = isScreen ? 700 : 400;
-
+  const { restState } = useStudyTime()
   const progress = useMemo(() => {
     if(totalMs <= 0){
       return 0
@@ -72,7 +67,7 @@ export default function CircularProgress({
             cy={viewBox/2}
             r={radius}
             fill="none"
-            stroke="#8EF1FF"
+            stroke={restState ? 'rgba(34, 197, 94, 0.87)' : 'rgba(14, 164, 233, 0.87)'}
             strokeWidth={strokeWidth}
             strokeLinecap="round"
             strokeDasharray={circumference}
