@@ -230,7 +230,7 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
   return(
     <div style={{display: 'flex', minHeight: '92vh', width: '100%'}}>
       <div className="LeftContainer" style={{flex: '1 1 60%'}}>
-        <div className="LeftDisplay" style={{height: '100%', padding: '25px 25px 30px 25px'}}>
+        <div className="LeftDisplay" style={{height: '100%', padding: '25px 25px 20px 20px'}}>
           <TimeCard className='DisplayTimerCard'>
             <Timer 
               timeData={{ studyTime: studyTime, restTime: restTime}}

@@ -19,14 +19,9 @@ const TimerContainer = styled('div')({
 })
 
 const TimerCircle = styled('div')({
-  display: 'flex',
-  flex: '1 1 70%',
-  // width: '100%',
-  // height: '60%',
-  // backgroundColor: 'blue',
-  // alignItems: 'center',
+  // display: 'flex',
   // justifyContent: 'center',
-  // paddingTop: '5%'
+  // alignItems: 'start',
 })
 
 const TimerButton = styled('div')({
@@ -35,6 +30,7 @@ const TimerButton = styled('div')({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  marginTop: '5%',
 })
 
 
@@ -82,11 +78,11 @@ export default function Timer({onOpenRecordConfirmModal}: timerProps){
       <TimerCircle className='TimerCircle'>
         <CircularProgress totalMs={restState ? restTime : studyTime} remainingMs={timerCount} />
       </TimerCircle>
-      <div className='TimerButtonContainer' style={{flex: '1 1 30%'}}>
+      <div className='TimerButtonContainer' >
         <TimerButton className='TimerButton'>
-          <IconButton onClick={() => start()}><PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 'clamp(30px, 7vw, 80px)'}}/></IconButton>
-          <IconButton onClick={() => stop()}><StopCircleOutlinedIcon sx={{fontSize: 'clamp(30px, 7vw, 80px)'}}/></IconButton>
-          <IconButton onClick={() => reset()}><RotateLeftOutlinedIcon sx={{fontSize: 'clamp(30px, 7vw, 80px)'}}/></IconButton>
+          <IconButton onClick={() => start()}><PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 'clamp(20px, 7vw, 80px)'}}/></IconButton>
+          <IconButton onClick={() => stop()}><StopCircleOutlinedIcon sx={{fontSize: 'clamp(20px, 7vw, 80px)'}}/></IconButton>
+          <IconButton onClick={() => reset()}><RotateLeftOutlinedIcon sx={{fontSize: 'clamp(20px, 7vw, 80px)'}}/></IconButton>
         </TimerButton>
       </div>
     </TimerContainer>

@@ -48,8 +48,8 @@ export default function CircularProgress({
   };
 
   return(
-    <div className='CircularProgress' style={{ width: '100%', height: '100%', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
-      <svg width={70 + '%'} height={70 + '%'} viewBox={`0 0 ${viewBox} ${viewBox}`}>
+    <div className='CircularProgress' style={{marginTop: '10%',display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
+      <svg width={50 + '%'} height={50 + '%'} viewBox={`0 0 ${viewBox} ${viewBox}`}>
         <g transform={`rotate(-90 ${viewBox/2} ${viewBox/2})`}>
           {/* 背景トラック */}
           <circle
