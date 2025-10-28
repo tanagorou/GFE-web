@@ -1,0 +1,5 @@
+module TimeUnits
+  ONE_SECONDS = 1000
+  ONE_MINUTES = 60 * ONE_SECONDS
+  ONE_HOURS = 60 * ONE_MINUTES
+end

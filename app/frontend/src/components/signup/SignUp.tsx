@@ -57,6 +57,9 @@ export default function SignUp() {
     });
   };
 
+
+  // 現在はSignUpをしてもトークンが発行されず、ログイン状態とはなっていないことになっている。
+  // サインアップ時にもトークンを発行するべきなのか、検討すべき
   const hundleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -73,7 +76,7 @@ export default function SignUp() {
         }
       );
       console.log("成功", response.data);
-      navigate('/')
+      navigate('/home')
     } catch (err: any) {
       console.log("エラー", err.response.data);
     }

@@ -1,14 +1,100 @@
-.overlay{
+.overlay {
   /*　画面全体を覆う設定　*/
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color:rgba(0,0,0,0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 
   /*　画面の中央に要素を表示させる設定　*/
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.study {
+  display: flex;
+  width: 100%;
+  gap: 24px;
+}
+
+.timerLayout {
+  flex: 1 1 60%;
+  display: flex;
+  justify-content: center;
+  padding-top: 5%;
+  min-width: 0;
+}
+
+.setupDetailLayout {
+  flex: 1 1 40%;
+  display: flex;
+  flex-direction: column;
+  /* 縦並び */
+  justify-content: flex-start;
+  padding-top: 15%;
+  min-width: 0;
+}
+
+.setupStudy {
+  font-size: clamp(20px, 3vw, 40px);
+  margin-bottom: 16px;
+}
+
+.studyTime {
+  font-size: clamp(20px, 3vw, 40px);
+  display: flex;
+  padding-left: 5%;
+}
+
+.setupRest {
+  font-size: clamp(20px, 3vw, 40px);
+}
+
+.restTime {
+  font-size: clamp(20px, 3vw, 40px);
+  display: flex;
+  padding-left: 5%;
+  margin-bottom: 5%;
+}
+
+.button {
+  padding-left: 5%;
+}
+
+.setupDetailLayout button {
+  width: 20%;
+
+}
+
+
+@media screen and (max-width: 1024px) {
+  .study {
+    gap: 16px;
+  }
+
+  .timerLayout,
+  .setupDetailLayout {
+    padding-top: 4%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .study {
+    flex-direction: column;
+  }
+
+  .timerLayout,
+  .setupDetailLayout {
+    flex: 1 1 auto;
+    width: 100%;
+    padding-top: 16px;
+  }
+
+  .studyTime,
+  .restTime {
+    padding-left: 0;
+    justify-content: center;
+  }
 }

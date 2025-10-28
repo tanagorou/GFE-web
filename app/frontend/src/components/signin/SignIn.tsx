@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import { Button, TextField } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Link from '@mui/material/Link';
+import { GoogleIcon } from "../GoogleIcon";
 
 const Container = styled('div')({
   minHeight: '100vh',
@@ -127,7 +128,7 @@ export default function SignIn() {
             新規登録
           </Link>
         <Divider sx={{ my: 3, width: '100%' }}></Divider>
-        <Link
+        {/* <Link
             component="button"
             variant="body2"
             onClick={() => {
@@ -136,7 +137,8 @@ export default function SignIn() {
             }}
           >
           Googleでログイン
-        </Link>
+        </Link> */}
+        <GoogleIcon />
       </LoginCard>
     </Container>
   );

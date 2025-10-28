@@ -1,5 +1,5 @@
-import { relative } from "path"
 import { useMemo } from "react"
+import { useStudyTime } from "../context/StudyContext";
 
 const ONE_SECONDS = 1000;
 const ONE_MINUTES = 60000;
@@ -18,12 +18,13 @@ type CircularProgressProps = {
 export default function CircularProgress({
   totalMs,
   remainingMs,
-  size = 700,
+  size = 90,
   strokeWidth = 5,
   showLabel = true,
   label,
   trackOpacity = 0.1
 }: CircularProgressProps){
+  const { restState } = useStudyTime()
   const progress = useMemo(() => {
     if(totalMs <= 0){
       return 0
@@ -47,8 +48,8 @@ export default function CircularProgress({
   };
 
   return(
-    <div style={{width: size, height: size, position: 'relative'}}>
-      <svg width={size} height={size} viewBox={`0 0 ${viewBox} ${viewBox}`}>
+    <div className='CircularProgress' style={{marginTop: '10%',display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
+      <svg width={50 + '%'} height={50 + '%'} viewBox={`0 0 ${viewBox} ${viewBox}`}>
         <g transform={`rotate(-90 ${viewBox/2} ${viewBox/2})`}>
           {/* 背景トラック */}
           <circle
@@ -66,7 +67,7 @@ export default function CircularProgress({
             cy={viewBox/2}
             r={radius}
             fill="none"
-            stroke="#8EF1FF"
+            stroke={restState ? 'rgba(34, 197, 94, 0.87)' : 'rgba(14, 164, 233, 0.87)'}
             strokeWidth={strokeWidth}
             strokeLinecap="round"
             strokeDasharray={circumference}
@@ -83,8 +84,8 @@ export default function CircularProgress({
             inset: 0,
             display: 'grid',
             placeItems: 'center',
-            fontWeight: 600,
-            fontSize: '70px',
+            fontWeight: 700,
+            fontSize: 'clamp(12px, 4.8vw, 65px)',
             fontVariantNumeric: "tabular-nums",
             userSelect: "none"
           }}

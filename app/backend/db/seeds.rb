@@ -8,8 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+table_names = %w(users study_records)
+# table_names = %w(users)
 
-table_names = %w(users)
 
 table_names.each do |table_names|
   path = Rails.root.join("db/seeds/#{Rails.env}/#{table_names}.rb")

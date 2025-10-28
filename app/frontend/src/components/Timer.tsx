@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import CircularProgress from './CircularProgress'
 import { IconButton } from '@mui/material';
 import PlayCircleFilledWhiteOutlinedIcon from '@mui/icons-material/PlayCircleFilledWhiteOutlined';
@@ -10,18 +10,29 @@ import { useStudyTime } from '../context/StudyContext';
 
 
 const TimerContainer = styled('div')({
+  height: '100%',
   display: 'flex',
-  minHeight: '92vh',
+  // height: '100%',
+  // width: '100%',
+  // backgroundColor: 'red',
   flexDirection: 'column'
 })
 
 const TimerCircle = styled('div')({
-  flex: '1',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginTop: '20px'
+  // display: 'flex',
+  // justifyContent: 'center',
+  // alignItems: 'start',
 })
+
+const TimerButton = styled('div')({
+  flex: 1,
+  // backgroundColor: 'green',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: '5%',
+})
+
 
 
 const ONE_SECONDS = 1000;
@@ -30,18 +41,16 @@ const ONE_HOURS = 3600000;
 
 
 type timerProps = {
-  timeData: Record<string, number>,
-  totalTime: Record<string, number>,
-  storeTotal: (v:any) => void
+  onOpenRecordConfirmModal: () => void
 }
 
-let completedTermsStudy = 0
-let completedTermsRest = 0
-
-export default function Timer({timeData, totalTime, storeTotal}: timerProps){
-
-  const { studyTime, restTime, restState, setRestState,setNextTimeState, timerCount, setTimerCount} = useStudyTime()
-
+export default function Timer({onOpenRecordConfirmModal}: timerProps){
+  const { studyTime,
+          restTime, 
+          restState, 
+          setNextTimeState, 
+          timerCount, 
+          setTimerCount } = useStudyTime()
 
   const start = () => {
     if(studyTime !== 0){
@@ -51,13 +60,12 @@ export default function Timer({timeData, totalTime, storeTotal}: timerProps){
 
   const stop = () => {
     setNextTimeState('standby')
-    // storeTotal(eachTotalTime())
+    onOpenRecordConfirmModal()
   }
 
   const reset = () => {
     console.log('rest', restState)
     setNextTimeState('standby')
-    // setRestState(restState ? false : true) //リセットときに休憩かどうかの判定が逆転してしまうので修正
     if(restState){
       setTimerCount(restTime)
     } else {
@@ -66,24 +74,17 @@ export default function Timer({timeData, totalTime, storeTotal}: timerProps){
   }
 
   return(
-    <TimerContainer>
-      <TimerCircle>
-        <CircularProgress 
-          totalMs={ restState ? restTime : studyTime } 
-          remainingMs={ timerCount }
-          />
+    <TimerContainer className='TimerContainer'>
+      <TimerCircle className='TimerCircle'>
+        <CircularProgress totalMs={restState ? restTime : studyTime} remainingMs={timerCount} />
       </TimerCircle>
-        <Grid container direction='row' sx={{  flex: '1',justifyContent: 'center', alignItems: 'flex-start', gap: 6}}>
-          <IconButton onClick={() => start()} >
-            <PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 100}}/>
-          </IconButton>
-          <IconButton onClick={() => stop()}>
-            <StopCircleOutlinedIcon sx={{fontSize: 100}}/>
-          </IconButton>
-          <IconButton onClick={() => reset()}>
-            <RotateLeftOutlinedIcon sx={{fontSize: 100}}/>
-          </IconButton>
-      </Grid>
+      <div className='TimerButtonContainer' >
+        <TimerButton className='TimerButton'>
+          <IconButton onClick={() => start()}><PlayCircleFilledWhiteOutlinedIcon sx={{fontSize: 'clamp(20px, 7vw, 80px)'}}/></IconButton>
+          <IconButton onClick={() => stop()}><StopCircleOutlinedIcon sx={{fontSize: 'clamp(20px, 7vw, 80px)'}}/></IconButton>
+          <IconButton onClick={() => reset()}><RotateLeftOutlinedIcon sx={{fontSize: 'clamp(20px, 7vw, 80px)'}}/></IconButton>
+        </TimerButton>
+      </div>
     </TimerContainer>
   )
 }

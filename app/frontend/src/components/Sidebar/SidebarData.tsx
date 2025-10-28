@@ -6,7 +6,7 @@ export const SidebarData = [
   {
     title: 'ホーム',
     icon: <HomeIcon />,
-    link: '/'
+    link: '/home'
   },
   {
     title: '勉強',
@@ -16,6 +16,6 @@ export const SidebarData = [
   {
     title: '記録',
     icon: <MenuBookIcon />,
-    link: '/record'
+    link: '/study_record_list'
   }
 ]
