@@ -1,13 +1,15 @@
 import { useState } from "react";
 import Timer from "./Timer";
 import { styled } from '@mui/material/styles';
-import { useNavigate } from "react-router-dom";
+import { useNotificationPermission } from "../context/NotificationPermissionContext";
+
 
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
 import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 // …既存の定数・Propsなどはそのまま…
 
 const SetUpCard = styled('div')({
@@ -160,6 +162,37 @@ const MusicIconPlay = styled('button')({
   },
 })
 
+export const Toggle = styled('button')({
+  cursor: 'pointer',
+  background: 'rgba(235, 235, 235, 0.91)',
+  padding: '2px',
+  width: '40px',
+  height: '20px',
+  border: 'none',
+  borderRadius: '10px',
+  display: 'grid',
+  gridTemplateColumns: '0fr 1fr 1fr',
+  position: 'relative',
+  transition: '.2s',
+
+  // 丸い「nub」
+  '&::after': {
+    content: '""',
+    borderRadius: '50%',
+    background: 'rgba(255, 255, 255, 0.82)',
+    gridColumn: '2',
+    transition: 'background .2s',
+  },
+
+  // チェック状態（.activeクラスなど）で動かす
+  '&.active': {
+    gridTemplateColumns: '1fr 1fr 0fr',
+  },
+
+  '&.active::after': {
+    backgroundColor: 'rgb(25, 233, 14)',
+  },
+});
 
 const Hint = styled('div')({
   gridColumn: '1 / -1',
@@ -198,18 +231,10 @@ const TimeCard = styled('div')({
   height: '100%'
 })
 
-// const SetUpCard = styled('div')({
-//   backgroundColor: '#fff',
-//   borderRadius: '10px',
-//   boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-//   boxSizing: 'border-box',
-//   height: '100%'
-// })
-
 export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onOpenRecordConfirmModal}:Props){
+  const { handleToggle } = useNotificationPermission()
   const [ totalTime, setTotalTime ] = useState({'study':0, 'rest':0})
-  const navigate = useNavigate()
-
+  const [ active, setActive ] = useState(false)
   const storeTotal = (data: any) => {
     setTotalTime(data)
     console.log(totalTime)
@@ -223,8 +248,10 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
       .map((val: any) => String(val).padStart(2, "0"))
       .join(":");
   };
-  const handle = () => {
-    console.log('作業時間が押されました')
+
+  const handle = (p: boolean) => {
+    setActive(!p)
+    handleToggle()
   }
 
   return(
@@ -256,24 +283,27 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
             </LabelPill>
             <div />
             <TimeText>{formatTime(studyTime)}</TimeText>
-            <Hint>開始後は一時停止/停止から変更できます</Hint>
           </Stat>
 
-          <Stat>
+          <Stat style={{ borderTop: 'none' }}>
             <LabelPillRest type="button" onClick={() => onOpenRest()}>
               <FreeBreakfastOutlinedIcon style={{ fontSize: 16 }} />
               休憩時間
             </LabelPillRest>
             <div />
             <TimeText>{formatTime(restTime)}</TimeText>
+            <Hint>タイマー停止後、設定を変更してください</Hint>
           </Stat>
+
+          <div style={{ borderTop: '1px solid rgba(15,23,42,0.06)' }}>
+          </div>
 
           <CardFooter>
             <Title>音楽設定</Title>
           </CardFooter>
           <Sub>このセッションで使われる音楽を設定してください。</Sub>
 
-          <Stat style={{borderTop: 'none'}}>
+          <Stat style={{ borderTop: 'none' }}>
             <LabelPill>
               <MusicNoteOutlinedIcon style={{ fontSize: 16 }} />
               音楽 (作業開始)
@@ -282,7 +312,7 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
             <div>
               <MusicText>
                 <MusicIcon>
-                  <MusicIconPlay type="button" onClick={handle}>
+                  <MusicIconPlay type="button" onClick={() => console.log('チャイムが押されました')}>
                     <PlayCircleFilledWhiteIcon style={{ fontSize: 32, color: '#0ea5e9'}} />
                   </MusicIconPlay>
                   チャイム
@@ -290,6 +320,17 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
               </MusicText>
               <Hint>作業終了時にチャイムが鳴ります</Hint>
             </div>
+          </Stat>
+          <Stat>
+            <div style={{ display: 'grid', alignItems: 'center'}}>
+              <NotificationsNoneIcon style={{ fontSize: 16 }} />
+            </div>
+            <Title>通知</Title>
+            <Toggle 
+                className={active ? "active" : ""}
+                onClick={() => handle(active)}
+              />
+              <Hint>タイマー作動中でも通知許可の変更ができます</Hint>
           </Stat>
         </SetUpCard>
         </div>

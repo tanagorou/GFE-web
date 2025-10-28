@@ -1,9 +1,7 @@
-import { Link } from "react-router-dom"
-import './Navbar.css'
-import DehazeIcon from '@mui/icons-material/Dehaze';
-import { useState } from "react"
-import { styled } from '@mui/material/styles';
 import { useSidebarOpen } from "../../context/SidebarContext";
+import { Link } from "react-router-dom"
+import DehazeIcon from '@mui/icons-material/Dehaze';
+import { styled } from '@mui/material/styles';
 
 const NavbarContainer = styled('div')({
   display: 'grid',

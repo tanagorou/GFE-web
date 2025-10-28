@@ -1,7 +1,3 @@
-// 現在必要な関数
-
-import { data } from "react-router-dom"
-
 // 1. レスポンスから現在のUserを格納する関数 => setCurrentUser
 export const setCurrentUser = (data: any) => {
   console.log(data)

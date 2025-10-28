@@ -1,12 +1,9 @@
-// ページ遷移が行われても、設定した勉強時間がリセットされないように
-// する
-
 import React, { createContext, ReactNode, useContext, useEffect, useState, useRef } from "react"
-import { useSnackbar } from "notistack";
-
-
+import { useNotification } from "../hooks/useNotification"
+import { useNotificationPermission } from "./NotificationPermissionContext"
 const StudyTimeContext = createContext<any>(undefined)
 
+// ページ遷移が行われても、設定した勉強時間がリセットされないようにするためのContext
 export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [studyTime, setStudyTime] = useState(0)
   const [restTime, setRestTime] = useState(0)
@@ -14,6 +11,7 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
   const [nextTimeState, setNextTimeState] = useState('standby')
   const [restState, setRestState] = useState(false)
   const [pomodoreCount, setPomodoreCount] = useState({study: 0, rest: 0})
+  const { showNotification } = useNotificationPermission()
   // const [totalTime, setTotalTime] = useState({study: 0, rest: 0})
   const timerIdRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
@@ -26,10 +24,22 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
       setTimerCount(restTime)
       // 休憩時間に入ったので、勉強ポモドーロカウントを＋１増加させる
       setPomodoreCount((prev) => ({...prev, study: prev.study + 1}))
+      if(typeof window !== 'undefined'){
+        showNotification({
+          body: '休憩時間に入りました',
+          data: 'rest_start',
+        })
+      }
     }else{
       setTimerCount(studyTime)
       // 勉強時間に入ったので、休憩ポモドーロカウントを＋１増加させる
       setPomodoreCount((prev) => ({...prev, rest: prev.rest + 1}))
+      if(typeof window !== 'undefined'){
+        showNotification({
+          body: '勉強時間に入りました',
+          data: 'study_start',
+        })
+      }
     }
   }
 
@@ -61,12 +71,10 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
 
 
   useEffect(() => {
-    // console.log('pomodoreCount:',pomodoreCount)
     if(nextTimeState !== 'active'){
       return
     }
     if(timerCount >= 0){
-      // console.log('timerCount:',timerCount)
       timerIdRef.current = setInterval(() => {
         setTimerCount((prev) => prev - 1000)
       }, 1000)

@@ -1,17 +1,31 @@
-import { Link } from 'react-router-dom'
-import { useState } from "react"
-import './Layout.css'
 import { styled } from '@mui/material/styles';
 
+const Container = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '92vh',
+})
+
+const TitleText = styled('h1')({
+  fontSize: '70px',
+  fontWeight: 'bold',
+  color: 'rgba(0, 0, 0, 0.8)',
+})
+
+const DescriptionText = styled('p')({
+  fontSize: '15px',
+  color: 'rgba(0, 0, 0, 0.8)',
+})
 
 export default function Home(){
-  const [ currentUser, setCurrentUser ] = useState('')
   return (
-    <div>
-      Welecome To GFE-web
-      <div>
-        <Link to='/study'>勉強する</Link>
-      </div>
-    </div>
+    <Container>
+      <TitleText>Welecome to GFE-web</TitleText>
+      <DescriptionText>
+        このサイトはエンジニアの勉強・作業をサポートするためのWebアプリです。
+      </DescriptionText>
+    </Container>
   )
 }

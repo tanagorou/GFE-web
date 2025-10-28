@@ -8,6 +8,8 @@ import Logout from "../components/logout/Logout";
 import { StudyTimeProvider } from "../context/StudyContext";
 import { StudyRecordList } from "../components/StudyRecordList";
 import { SnackbarProvider } from "notistack";
+import { NotificationPermissionProvider } from "../context/NotificationPermissionContext";
+import NotFound from "../pages/NotFound";
 
 
 export default function AppRoutes(){
@@ -17,16 +19,19 @@ export default function AppRoutes(){
         <Route path='/signin' element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} /> 
         <Route path="/logout" element={<Logout />} />
+        <Route path="*" element={<NotFound />} />
         <Route element={
           <SnackbarProvider
           anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
           >
-            <StudyTimeProvider>
-              <Outlet />
-            </StudyTimeProvider>
+            <NotificationPermissionProvider>
+              <StudyTimeProvider>
+                  <Outlet />
+                </StudyTimeProvider>
+            </NotificationPermissionProvider>
           </SnackbarProvider>
             }>
-          <Route path="/" element={<Layout />}>
+          <Route element={<Layout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/study/*" element={<StudyPage/>}/>
             <Route path="/study_record_list" element={<StudyRecordList/>}/>

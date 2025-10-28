@@ -64,7 +64,7 @@ export default function SetupRestTime({onChangeTime,onClose,onBack}:props) {
 
       // 2025/10/06][追記]  コンポーネントの再描画で、Enter（Escape）キー一発で戻らない。
       // 今後は使いやすくしたいので、この操作を入れれるようになりたいね
-      
+
       // if(e.key === "Enter") handleChange()
       // if(e.key === "Escape") onClose()
     };
