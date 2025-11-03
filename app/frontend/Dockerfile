@@ -1,19 +1,19 @@
-# frontend/Dockerfile
-FROM node:21.5.0
+FROM node:20   # 21でもOKですが、LTSの方が安定しやすい
 
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+
+# タイムアウトを10分に延長（グローバル設定）
+RUN yarn config set network-timeout 600000 -g
+
+# リトライ付きインストール（最大3回）
+RUN for i in 1 2 3; do yarn install --frozen-lockfile --no-progress && break || sleep 10; done
 
 COPY . .
-# CRAなら build、Viteなら dist に合わせて script を調整
-RUN yarn build
 
-# 軽量化：ローカル dev 用依存は消してもOK
+# ここもリトライさせてもOK
+RUN for i in 1 2 3; do yarn build && break || sleep 10; done
+
+# serve運用ならこのまま
 RUN yarn global add serve
-
-# Render 側が $PORT を注入するので EXPOSE は省略可（あっても可）
-# EXPOSE 3000
-
-# 0.0.0.0 で $PORT をリッスン
 CMD ["sh","-c","serve -s build -l tcp://0.0.0.0:$PORT"]
