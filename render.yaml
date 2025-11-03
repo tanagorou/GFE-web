@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: rails-api
+    name: GFE-web-api
     env: docker
     plan: free
     rootDir: app/backend
@@ -10,6 +10,8 @@ services:
         value: production
       - key: PORT
         value: "10000"
+      - key: REACT_APP_API_BASE_URL
+        sync: false
       - key: SECRET_KEY_BASE
         sync: false
       - key: GOOGLE_CLIENT_ID
@@ -25,7 +27,7 @@ services:
 
   # --- React（serve 版）---
   - type: web
-    name: react-web
+    name: GFE-web
     env: docker
     plan: free
     rootDir: app/frontend
