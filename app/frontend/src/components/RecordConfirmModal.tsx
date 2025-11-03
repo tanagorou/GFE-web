@@ -6,7 +6,7 @@ import { Overlay, Card } from "./SetUpPageStyle";
 import { styled } from "@mui/material/styles";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { useState } from "react"
-import { useSnackbar } from "notistack";1
+import { useSnackbar } from "notistack";
 
 const Header = styled("div")({
   position: "relative",
