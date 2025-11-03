@@ -10,7 +10,7 @@ import { StudyRecordList } from "../components/StudyRecordList";
 import { SnackbarProvider } from "notistack";
 import { NotificationPermissionProvider } from "../context/NotificationPermissionContext";
 import NotFound from "../pages/NotFound";
-
+import { GoogleCallback } from "../components/GoogleCallback";
 
 export default function AppRoutes(){
   return (
@@ -19,6 +19,7 @@ export default function AppRoutes(){
         <Route path='/signin' element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} /> 
         <Route path="/logout" element={<Logout />} />
+        <Route path="/auth/callback" element={<GoogleCallback />} />
         <Route path="*" element={<NotFound />} />
         <Route element={
           <SnackbarProvider

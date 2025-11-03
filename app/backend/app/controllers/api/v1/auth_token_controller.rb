@@ -22,6 +22,13 @@ class Api::V1::AuthTokenController < ApplicationController
     render json: login_response
   end
 
+  # googleログイン
+  def google_login
+    @user = current_user
+    set_refresh_token_to_cookie
+    render json: login_response
+  end
+
   # リフレッシュ
   def refresh
     @user = session_user

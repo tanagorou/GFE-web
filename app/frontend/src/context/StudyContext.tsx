@@ -1,5 +1,4 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState, useRef } from "react"
-import { useNotification } from "../hooks/useNotification"
 import { useNotificationPermission } from "./NotificationPermissionContext"
 const StudyTimeContext = createContext<any>(undefined)
 
@@ -11,8 +10,9 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
   const [nextTimeState, setNextTimeState] = useState('standby')
   const [restState, setRestState] = useState(false)
   const [pomodoreCount, setPomodoreCount] = useState({study: 0, rest: 0})
+  const [playMusic, setPlayMusic] = useState<any>({title: 'オフ', path: null})
   const { showNotification } = useNotificationPermission()
-  // const [totalTime, setTotalTime] = useState({study: 0, rest: 0})
+
   const timerIdRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
   // タイマーをContext内で管理、ページ遷移が行われてもタイマーが停止しないように改良
@@ -30,6 +30,10 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
           data: 'rest_start',
         })
       }
+      // 音楽再生
+      if(playMusic.path !== null){
+        playMusic.path.play()
+      }
     }else{
       setTimerCount(studyTime)
       // 勉強時間に入ったので、休憩ポモドーロカウントを＋１増加させる
@@ -39,6 +43,10 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
           body: '勉強時間に入りました',
           data: 'study_start',
         })
+      }
+      // 音楽再生
+      if(playMusic.path !== null){
+        playMusic.path.play()
       }
     }
   }
@@ -100,7 +108,9 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
               restState,
               setRestState,
               culcurateTotalTime,
-              resetRecords
+              resetRecords,
+              playMusic,
+              setPlayMusic
               }}>
       {children}
     </StudyTimeContext.Provider>

@@ -1,8 +1,7 @@
 import axios from "axios"
-import { createContext, useContext, useEffect, useState } from "react"
-import {setAccessToken, setCurrentUser, isExistUser, isExpired, isExistUserAndExpired, loggedIn} from "./Auth"
+import { createContext, useContext, useEffect, useState} from "react"
+import {setAccessToken, setCurrentUser, isExistUserAndExpired} from "./Auth"
 import { useLocation, useNavigate } from "react-router-dom";
-
 
 type AuthContextType = {
   authToken: Record<string, any>
@@ -16,11 +15,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
   const navigate = useNavigate()
   const location = useLocation()
   const [authToken, setAuthToken] = useState({user:{current: ''}, auth: {token: '', expires: 0, payload: {}}})
+  console.log('authToken', authToken)
 
   useEffect(() => {
-    // console.log('ページ遷移しました')
-    // console.log('now', new Date(Date.now()))
-    // console.log('exp', new Date(authToken.auth.expires))
+    console.log('リロード時にトークンを発行')
+    const refreshToken = async() => {
+      try{
+        const respone = await axios.post(
+          "http://localhost:3000/api/v1/auth_token/refresh",
+          {},
+          { 
+            withCredentials: true,
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        const data = respone.data
+        setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
+      } catch (err){
+        console.log('リフレッシュトークンの有効期限が切れました。',err)
+        navigate('/signin')
+      }
+    }
+    refreshToken()
+  }, []);
+
+  useEffect(() => {
     if(isExistUserAndExpired(authToken)){
       (async () => {
         try{
@@ -45,33 +67,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
       })()
     }
   },[location.pathname])
-
-
-//リロード時にトークンを発行するように設定
-// 原因: useStateが初期値に更新され、/signupに飛ばされてしまう
-  useEffect(() => {
-    (async() => {
-      try{
-        const respone = await axios.post(
-          "http://localhost:3000/api/v1/auth_token/refresh",
-          {},
-          { 
-            withCredentials: true,
-            headers: {
-              "X-Requested-With": "XMLHttpRequest",
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        const data = respone.data
-        setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
-      } catch (err){
-        console.log('リフレッシュトークンの有効期限が切れました。',err)
-        navigate('/signin')
-      }
-    })()
-  }, []);
-
 
   const login = (data: any) => {
     setAuthToken({...setCurrentUser(data), ...setAccessToken(data)})
