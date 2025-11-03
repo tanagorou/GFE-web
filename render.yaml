@@ -15,7 +15,7 @@ services:
       - key: MYSQL_PASSWORD
         sync: false
     disk:
-      - name: mysql-data
+        name: mysql-data
         mountPath: /var/lib/mysql
         sizeGB: 10
 
