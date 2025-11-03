@@ -35,7 +35,8 @@ services:
     envVars:
       - key: PORT
         value: "10000"
-
+      - key: RAILS_API_URL
+        sync: false
 databases:
   - name: app-db
     plan: free
