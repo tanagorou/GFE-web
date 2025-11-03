@@ -14,7 +14,7 @@ services:
         value: app_user
       - key: MYSQL_PASSWORD
         sync: false
-    disks:
+    disk:
       - name: mysql-data
         mountPath: /var/lib/mysql
         sizeGB: 10
