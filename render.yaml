@@ -32,13 +32,13 @@ services:
         value: "10000"
       - key: DATABASE_URL
         sync: false
-      - SECRET_KEY_BASE
+      - key: SECRET_KEY_BASE
         sync: false
-      - GOOGLE_CLIENT_ID
+      - key: GOOGLE_CLIENT_ID
         sync: false
-      - GOOGLE_CLIENT_SECRET
+      - key: GOOGLE_CLIENT_SECRET
         sync: false
-      - JWT_SECRET_KEY
+      - key: JWT_SECRET_KEY
         sync: false
         # 例：mysql2://app_user:******@<mysql-internal-host>:3306/app_db?encoding=utf8mb4
         # <mysql-internal-host> は MySQL サービス作成後、ダッシュボードの Connect > Internal で確認
