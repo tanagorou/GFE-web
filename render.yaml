@@ -23,14 +23,15 @@ services:
           name: app-db
           property: connectionString
 
-  - type: static            # ReactはStatic Siteにすると完全無料
+  # --- React（serve 版）---
+  - type: web
     name: react-web
-    buildCommand: yarn install --frozen-lockfile && yarn build
-    staticPublishPath: build     # Viteなら dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    env: docker
+    plan: free
+    dockerfilePath: ./frontend/Dockerfile
+    envVars:
+      - key: PORT
+        value: "10000"
 
 databases:
   - name: app-db
