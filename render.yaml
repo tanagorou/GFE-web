@@ -3,7 +3,7 @@ services:
   - type: pserv
     name: mysql
     env: docker
-    plan: starter
+    plan: free
     dockerfilePath: ./infra/mysql/Dockerfile   # なくても FROM mysql:8.0 だけのシンプルDockerfileでOK
     envVars:
       - key: MYSQL_ROOT_PASSWORD
@@ -23,7 +23,7 @@ services:
   - type: web
     name: rails-api
     env: docker
-    plan: starter
+    plan: free
     dockerfilePath: ./backend/Dockerfile
     envVars:
       - key: RAILS_ENV
@@ -32,6 +32,14 @@ services:
         value: "10000"
       - key: DATABASE_URL
         sync: false
+      - SECRET_KEY_BASE
+        sync: false
+      - GOOGLE_CLIENT_ID
+        sync: false
+      - GOOGLE_CLIENT_SECRET
+        sync: false
+      - JWT_SECRET_KEY
+        sync: false
         # 例：mysql2://app_user:******@<mysql-internal-host>:3306/app_db?encoding=utf8mb4
         # <mysql-internal-host> は MySQL サービス作成後、ダッシュボードの Connect > Internal で確認
 
@@ -39,7 +47,7 @@ services:
   - type: web
     name: react-web
     env: docker
-    plan: starter
+    plan: feww
     dockerfilePath: ./frontend/Dockerfile
     envVars:
       - key: PORT
