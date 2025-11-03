@@ -1,10 +1,9 @@
 services:
-  # --- MySQL (Private Service) ---
   - type: pserv
     name: mysql
     env: docker
     plan: starter
-    dockerfilePath: ./infra/mysql/Dockerfile   # なくても FROM mysql:8.0 だけのシンプルDockerfileでOK
+    image: mysql:8.0
     envVars:
       - key: MYSQL_ROOT_PASSWORD
         sync: false
@@ -15,29 +14,25 @@ services:
       - key: MYSQL_PASSWORD
         sync: false
     disk:
-        name: mysql-data
-        mountPath: /var/lib/mysql
-        sizeGB: 10
+      name: mysql-data
+      mountPath: /var/lib/mysql
+      sizeGB: 10
 
-  # --- Rails API ---
   - type: web
     name: rails-api
     env: docker
     plan: starter
     dockerfilePath: ./backend/Dockerfile
-    buildCommand: ./bin/render-build.sh
-    startCommand: ./bin/render-start.sh
     envVars:
       - key: RAILS_ENV
         value: production
       - key: PORT
         value: "10000"
+      - key: RAILS_MASTER_KEY
+        sync: false
       - key: DATABASE_URL
         sync: false
-        # 例：mysql2://app_user:******@<mysql-internal-host>:3306/app_db?encoding=utf8mb4
-        # <mysql-internal-host> は MySQL サービス作成後、ダッシュボードの Connect > Internal で確認
 
-  # --- React（serve 版）---
   - type: web
     name: react-web
     env: docker
