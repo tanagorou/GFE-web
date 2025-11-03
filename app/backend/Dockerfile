@@ -2,8 +2,11 @@
 FROM ruby:3.2.2
 
 # Node と MySQLクライアント（アセットやヘルスチェックで使用）
+# RUN apt-get update -qq && \
+#     apt-get install -y nodejs default-mysql-client && \
+#     rm -rf /var/lib/apt/lists/*
 RUN apt-get update -qq && \
-    apt-get install -y nodejs default-mysql-client && \
+    apt-get install -y nodejs postgresql-client libpq-dev && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

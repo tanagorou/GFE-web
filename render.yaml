@@ -1,25 +1,4 @@
 services:
-  # --- MySQL (Private Service) ---
-  - type: pserv
-    name: mysql
-    env: docker
-    plan: free
-    dockerfilePath: ./infra/mysql/Dockerfile   # なくても FROM mysql:8.0 だけのシンプルDockerfileでOK
-    envVars:
-      - key: MYSQL_ROOT_PASSWORD
-        sync: false
-      - key: MYSQL_DATABASE
-        value: app_db
-      - key: MYSQL_USER
-        value: app_user
-      - key: MYSQL_PASSWORD
-        sync: false
-    disk:
-        name: mysql-data
-        mountPath: /var/lib/mysql
-        sizeGB: 10
-
-  # --- Rails API ---
   - type: web
     name: rails-api
     env: docker
@@ -40,15 +19,19 @@ services:
         sync: false
       - key: JWT_SECRET_KEY
         sync: false
-        # 例：mysql2://app_user:******@<mysql-internal-host>:3306/app_db?encoding=utf8mb4
-        # <mysql-internal-host> は MySQL サービス作成後、ダッシュボードの Connect > Internal で確認
+        fromDatabase:
+          name: app-db
+          property: connectionString
 
-  # --- React（serve 版）---
-  - type: web
+  - type: static            # ReactはStatic Siteにすると完全無料
     name: react-web
-    env: docker
-    plan: feww
-    dockerfilePath: ./frontend/Dockerfile
-    envVars:
-      - key: PORT
-        value: "10000"
+    buildCommand: yarn install --frozen-lockfile && yarn build
+    staticPublishPath: build     # Viteなら dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  - name: app-db
+    plan: free
