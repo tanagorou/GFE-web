@@ -11,7 +11,7 @@ import { Navbar } from './layouts/Navbar/Index';
 import Timer from './components/Timer';
 import StudyPage from './pages/StudyPage';
 import Sidebar from './components/Sidebar/Sidebar';
-import { GoogleIcon } from './components/GoogleIcon';
+import { GoogleIcon } from './components/GoogleCallback';
 import AppRoutes from './routes';
 
 

@@ -1,13 +1,12 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useAuth } from "../context/AuthContext"
-import { CardRecorder } from "./Card"
 import { styled } from '@mui/material/styles';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import WavingHandIcon from '@mui/icons-material/WavingHand';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import FormatterDemo from "./GraphStudy"
-import { Link } from "react-router-dom"
+import LoadingProgress from "./LoadingProgress"
 
 const ContainerLeft = styled('div')({
   display: 'flex',
@@ -260,6 +259,7 @@ export const StudyRecordList = () => {
   }
 
   useEffect(() => {
+    if(!authToken.auth.token) return
     const getStudyRecord = async () => {
       try {
         const response = await axios.get(
@@ -285,14 +285,14 @@ export const StudyRecordList = () => {
         setReady(true)
         console.log(d)
       } catch (err: any) {
-        console.log(err.response.data)
+        console.log(err)
       }
     }
     getStudyRecord()
-  }, [])
+  }, [authToken])
 
 
-  if(!ready || !displayTime) return <div>Loading...</div>
+  if(!ready || !displayTime) return <LoadingProgress />
 
   return (
       <Container>

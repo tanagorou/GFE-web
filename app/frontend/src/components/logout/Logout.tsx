@@ -32,6 +32,7 @@ export default function Logout (){
         navigate('/signin')
       } catch (err){
         console.log('ログアウト失敗:', err)
+        navigate('/signin')
       }
     })()
   },[logout, navigate])

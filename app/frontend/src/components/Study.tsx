@@ -2,7 +2,9 @@ import { useState } from "react";
 import Timer from "./Timer";
 import { styled } from '@mui/material/styles';
 import { useNotificationPermission } from "../context/NotificationPermissionContext";
-
+import { useStudyTime } from "../context/StudyContext";
+import { sounds } from "./assets/sounds/sound";
+import { useNotification } from "../hooks/useNotification";
 
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
@@ -96,6 +98,52 @@ const LabelPill = styled('button')({
   },
   '&:active': {
     transform: 'translateY(0)', // クリックしたら戻る
+  },
+});
+
+const LabelPillMusic = styled('div')({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 6,
+  fontSize: 12,
+  fontWeight: 600,
+  color: '#0ea5e9',
+  background: 'rgba(14,165,233,0.10)',
+  border: '1px solid rgba(14,165,233,0.25)',
+  padding: '6px 10px',
+  borderRadius: 999,
+  cursor: 'pointer',
+  transition: 'background 0.2s ease, transform 0.1s ease',
+  '&:hover': {
+    background: 'rgba(14,165,233,0.20)',
+    transform: 'translateY(-1px)', // ちょっと浮く
+  },
+  '&:active': {
+    transform: 'translateY(0)', // クリックしたら戻る
+  },
+});
+
+const Wrapper = styled('div')({
+  position: 'relative',
+  display: 'inline-block',
+});
+
+const SelectMenu = styled('select')({
+  position: 'absolute',
+  top: '100%',
+  left: 0,
+  display: 'none',
+  background: '#fff',
+  border: '1px solid rgba(0,0,0,0.15)',
+  borderRadius: 8,
+  padding: '4px 6px',
+  fontSize: 12,
+  zIndex: 10,
+});
+
+const WrapperHover = styled(Wrapper)({
+  '&:hover select': {
+    display: 'block',
   },
 });
 
@@ -232,9 +280,10 @@ const TimeCard = styled('div')({
 })
 
 export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onOpenRecordConfirmModal}:Props){
-  const { handleToggle } = useNotificationPermission()
+  const { handleToggle, localEnabled } = useNotificationPermission()
+  const { nextTimeState, playMusic, setPlayMusic } = useStudyTime()
   const [ totalTime, setTotalTime ] = useState({'study':0, 'rest':0})
-  const [ active, setActive ] = useState(false)
+  const [ active, setActive ] = useState(localEnabled)
   const storeTotal = (data: any) => {
     setTotalTime(data)
     console.log(totalTime)
@@ -250,8 +299,32 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
   };
 
   const handle = (p: boolean) => {
-    setActive(!p)
     handleToggle()
+    setActive(!p)
+    console.log(active)
+  }
+
+  const selectItems = sounds.map((item: any) => (
+    <option key={item.id} value={item.id}>{item.name}</option>
+  ))
+
+  const handleMusicChange = (e: any) => {
+    if(e.target.value === '1'){
+      setPlayMusic({title: 'オフ', path: null})
+      return
+    }
+    const audioTitle = sounds[e.target.value - 1].name
+    const audioPath = new Audio(sounds[e.target.value - 1].path)
+    setPlayMusic({title: audioTitle, path: audioPath})
+    console.log(playMusic)
+  }
+
+  const clickPlayMusic = () => {
+    if(nextTimeState !== 'standby') return
+    if(playMusic.path !== null){
+      playMusic.path.play()
+    }
+    return
   }
 
   return(
@@ -260,9 +333,9 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
         <div className="LeftDisplay" style={{height: '100%', padding: '25px 25px 20px 20px'}}>
           <TimeCard className='DisplayTimerCard'>
             <Timer 
-              timeData={{ studyTime: studyTime, restTime: restTime}}
-              totalTime={totalTime}
-              storeTotal={storeTotal}
+              // timeData={{ studyTime: studyTime, restTime: restTime}}
+              // totalTime={totalTime}
+              // storeTotal={storeTotal}
               onOpenRecordConfirmModal={onOpenRecordConfirmModal}
             />
           </TimeCard>
@@ -303,22 +376,27 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
           </CardFooter>
           <Sub>このセッションで使われる音楽を設定してください。</Sub>
 
-          <Stat style={{ borderTop: 'none' }}>
-            <LabelPill>
-              <MusicNoteOutlinedIcon style={{ fontSize: 16 }} />
-              音楽 (作業開始)
-            </LabelPill>
+          <Stat style={{ borderTop: 'none' }}> 
+            <WrapperHover>
+              <LabelPillMusic>
+                <MusicNoteOutlinedIcon style={{ fontSize: 16 }} />
+                音楽 (作業開始)
+              </LabelPillMusic>
+              <SelectMenu onChange={(e) => handleMusicChange(e)}>
+                {selectItems}
+              </SelectMenu>
+            </WrapperHover>
             <div />
             <div>
               <MusicText>
                 <MusicIcon>
-                  <MusicIconPlay type="button" onClick={() => console.log('チャイムが押されました')}>
+                  <MusicIconPlay type="button" onClick={() => clickPlayMusic()}>
                     <PlayCircleFilledWhiteIcon style={{ fontSize: 32, color: '#0ea5e9'}} />
                   </MusicIconPlay>
-                  チャイム
+                  {playMusic.title}
                 </MusicIcon>
               </MusicText>
-              <Hint>作業終了時にチャイムが鳴ります</Hint>
+              { playMusic.title !== 'オフ' &&  <Hint>作業終了時にチャイムが鳴ります</Hint>}
             </div>
           </Stat>
           <Stat>
@@ -326,12 +404,13 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
               <NotificationsNoneIcon style={{ fontSize: 16 }} />
             </div>
             <Title>通知</Title>
+            {/* ローカルに保存した通知状態を取ってくる */}
             <Toggle 
                 className={active ? "active" : ""}
-                onClick={() => handle(active)}
+                onClick={() => handle(localEnabled)}
               />
               <Hint>タイマー作動中でも通知許可の変更ができます</Hint>
-          </Stat>
+          </Stat> 
         </SetUpCard>
         </div>
       </div>

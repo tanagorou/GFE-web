@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       
       resources :auth_token, only: [:create] do
         post :refresh, on: :collection
+        post :google_login, on: :collection
         delete :destroy, on: :collection
       end
     end
