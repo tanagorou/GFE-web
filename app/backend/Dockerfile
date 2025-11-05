@@ -1,32 +1,31 @@
-# backend/Dockerfile
-FROM ruby:3.2.2
+FROM  ruby:3.2.2
 
-# Node と MySQLクライアント（アセットやヘルスチェックで使用）
-# RUN apt-get update -qq && \
-#     apt-get install -y nodejs default-mysql-client && \
-#     rm -rf /var/lib/apt/lists/*
-RUN apt-get update -qq && \
-    apt-get install -y nodejs postgresql-client libpq-dev && \
-    rm -rf /var/lib/apt/lists/*
+ARG UID
+ARG GID
+ARG USERNAME
+
+RUN apt-get update -qq && apt-get install -y nodejs default-mysql-client
 
 WORKDIR /app
 
-# 依存を先に入れてキャッシュを効かせる
-COPY Gemfile Gemfile.lock ./
-RUN gem install bundler && bundle install --without development test
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
 
-# アプリ本体
-COPY . .
+RUN gem install bundler
+RUN bundle install
 
-# タイムゾーン
-ENV TZ=Asia/Tokyo
+COPY . /app
 
-# 本番アセット（ある場合）
-# Rails 7+ で importmap なら不要、webpacker/jsbundling なら必要に応じて調整
-# RUN bundle exec rake assets:precompile
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
 
-# Render は $PORT を注入。EXPOSE は省略可（あっても可）
-# EXPOSE 10000
+# タイムゾーンをAsia/Tokyoに設定
+ENV TZ Asia/Tokyo
 
-# Puma で 0.0.0.0:$PORT を待受（puma.rb も下に載せます）
-CMD ["bundle","exec","puma","-C","config/puma.rb"]
+RUN groupadd --force -g $GID $USERNAME
+RUN useradd -ms /bin/bash --no-user-group -g $GID -u $UID $USERNAME
+
+EXPOSE 3000
+
+CMD ["rails", "server", "-b", "0.0.0.0"]

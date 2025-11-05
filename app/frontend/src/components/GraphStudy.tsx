@@ -1,13 +1,6 @@
-import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import { styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { createTheme } from '@mui/material/styles';
-import Link from '@mui/material/Link';
 import { useTheme } from '@mui/material/styles';
-import { data } from 'react-router-dom';
-
-
 
 // const valueFormatter = (value: number | null) => `${value}mm`;
 const valueFormatter = (value: number | null) => {

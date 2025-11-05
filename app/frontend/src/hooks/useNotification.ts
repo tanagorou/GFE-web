@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react"
+
 export const useNotification = () => {
   const [permission, setPermission] = useState<NotificationPermission | 'unsupported'>('default')
   const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | null>(null)

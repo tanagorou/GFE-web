@@ -1,7 +1,7 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState, useRef } from "react"
+import { createContext, ReactNode, useContext, useEffect, useState, useRef } from "react"
 import { useNotificationPermission } from "./NotificationPermissionContext"
-const StudyTimeContext = createContext<any>(undefined)
 
+const StudyTimeContext = createContext<any>(undefined)
 // ページ遷移が行われても、設定した勉強時間がリセットされないようにするためのContext
 export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [studyTime, setStudyTime] = useState(0)

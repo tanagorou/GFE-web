@@ -14,32 +14,27 @@ class Api::V1::StudyRecordsController < ApplicationController
 
   def index
     # 今日の勉強時間
-    day_records = StudyRecord.new.get_today_work_records(current_user.id)
-
+    day = StudyRecord.new.get_today_work_records(current_user.id)
     # 週の勉強時間
-    week_records = StudyRecord.new.get_week_work_records(current_user.id)
-
+    week = StudyRecord.new.get_week_work_records(current_user.id)
     # 月の勉強時間
-    month_records = StudyRecord.new.get_month_work_records(current_user.id)
-
+    month = StudyRecord.new.get_month_work_records(current_user.id)
     # 全ての勉強時間
-    all_records = StudyRecord.new.sum_all_work_records(current_user.id)
-
+    all = StudyRecord.new.sum_all_work_records(current_user.id)
     # その日ごとの勉強時間(グラフに表示)
-    each_day_study_time = StudyRecord.new.get_each_day_study_time(current_user.id)
-
-    render json: { study_records: { day_records: day_records,
-                                    week_records: week_records,
-                                    month_records: month_records,
-                                    all_records: all_records,
-                                    each_day_study_time: each_day_study_time}}
+    each = StudyRecord.new.get_each_day_study_time(current_user.id)
+    render json: { record: { day: day,
+                             week: week,
+                             month: month,
+                             all: all,
+                             each: each}}
   end
 
   # その週の勉強時間を取ってくる
   def search
     week_offset = params[:week_offset].to_i || 0
-    each_day_study_time = StudyRecord.new.get_each_day_study_time(current_user.id, week_offset = week_offset)
-    render json: { study_records: { each_day_study_time: each_day_study_time}}
+    each = StudyRecord.new.get_each_day_study_time(current_user.id, week_offset = week_offset)
+    render json: { record: { each: each}}
   end
 
   private
@@ -48,11 +43,6 @@ class Api::V1::StudyRecordsController < ApplicationController
   def get_parms
     params.require(:study_record).permit(:work_seconds, :rest_seconds)
   end
-
-  # 週の記録を取ってくる
-  # week_offset, today
-  # def get_week_records(user_id, week_offset, today)
-
 
   # 受け取ったmsをsに変換（テーブルのカラムがMinituesになっているが保存するときはSecondsのまま保存）
   def convert_ms_to_seconds(ms)

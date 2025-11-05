@@ -10,6 +10,12 @@ services:
         value: production
       - key: PORT
         value: "10000"
+      - key: UID
+        sync: false
+      - key: GID
+        sync: false
+      - key: USERNAME
+        sync: false
       - key: REACT_APP_API_BASE_URL
         sync: false
       - key: SECRET_KEY_BASE
@@ -39,4 +45,4 @@ services:
         sync: false
 databases:
   - name: app-db
-    plan: free
+    plan: starter
