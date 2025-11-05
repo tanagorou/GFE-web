@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_19_105839) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_05_065936) do
   create_table "study_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "work_seconds", null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_19_105839) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "refresh_jti"
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "study_records", "users"

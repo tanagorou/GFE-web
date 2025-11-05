@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
+
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import EastRoundedIcon from "@mui/icons-material/EastRounded";
 import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import { Overlay, Card, Header, TitleWrap, Title, Subtitle, Display, UnitHints, Grid, ControlButton, Actions, Primary, ResetBtn, IconGhostBtn, DisplayText, Column } from "./SetUpPageStyle";
@@ -18,8 +17,6 @@ type Props = {
   onNext: () => void;
   onClose: () => void;
 };
-
-
 
 export default function SetupStudyTime({ onChangeTime, onNext, onClose }: Props) {
   const [timerCount, setTimerCount] = useState(0);

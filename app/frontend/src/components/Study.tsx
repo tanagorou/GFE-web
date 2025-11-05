@@ -1,16 +1,14 @@
 import { useState } from "react";
 import Timer from "./Timer";
-import { styled } from '@mui/material/styles';
 import { useNotificationPermission } from "../context/NotificationPermissionContext";
 import { useStudyTime } from "../context/StudyContext";
 import { sounds } from "./assets/sounds/sound";
-import { useNotification } from "../hooks/useNotification";
 
+import { styled } from '@mui/material/styles';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
 import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
-import EqualizerIcon from '@mui/icons-material/Equalizer';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 // …既存の定数・Propsなどはそのまま…
 
@@ -249,9 +247,6 @@ const Hint = styled('div')({
   color: '#9ca3af',
 });
 
-
-
-
 const ONE_SECONDS = 1000;
 const ONE_MINUTES = 60000;
 const ONE_HOURS = 3600000;
@@ -264,13 +259,6 @@ type Props = {
   onOpenRecordConfirmModal: () => void
 }
 
-
-const Container = styled('div')({
-  minHeight: '90vh',
-  display: 'flex',
-  backgroundColor: '#fff',
-})
-
 const TimeCard = styled('div')({
   backgroundColor: '#fff',
   borderRadius: '10px',
@@ -282,12 +270,7 @@ const TimeCard = styled('div')({
 export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onOpenRecordConfirmModal}:Props){
   const { handleToggle, localEnabled } = useNotificationPermission()
   const { nextTimeState, playMusic, setPlayMusic } = useStudyTime()
-  const [ totalTime, setTotalTime ] = useState({'study':0, 'rest':0})
   const [ active, setActive ] = useState(localEnabled)
-  const storeTotal = (data: any) => {
-    setTotalTime(data)
-    console.log(totalTime)
-  }
 
   const formatTime = (msSeconds: number) => {
     const hour = Math.floor(msSeconds / ONE_HOURS);
@@ -333,9 +316,6 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
         <div className="LeftDisplay" style={{height: '100%', padding: '25px 25px 20px 20px'}}>
           <TimeCard className='DisplayTimerCard'>
             <Timer 
-              // timeData={{ studyTime: studyTime, restTime: restTime}}
-              // totalTime={totalTime}
-              // storeTotal={storeTotal}
               onOpenRecordConfirmModal={onOpenRecordConfirmModal}
             />
           </TimeCard>

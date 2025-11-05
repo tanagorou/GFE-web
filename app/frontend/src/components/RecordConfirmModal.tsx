@@ -1,12 +1,13 @@
-import { useStudyTime } from "../context/StudyContext"
-import axios from "axios"
-import axiosCaseConverter from "simple-axios-case-converter"
-import { useAuth } from "../context/AuthContext"
-import { Overlay, Card } from "./SetUpPageStyle";
-import { styled } from "@mui/material/styles";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { useState } from "react"
 import { useSnackbar } from "notistack";
+
+import { useStudyTime } from "../context/StudyContext"
+import { useAuth } from "../context/AuthContext"
+import { Overlay, Card } from "./SetUpPageStyle";
+import { api } from "../api/api";
+
+import { styled } from "@mui/material/styles";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const Header = styled("div")({
   position: "relative",
@@ -106,8 +107,6 @@ const SubmitBtn = styled('button')({
   },
 })
 
-axiosCaseConverter(axios)
-
 const ONE_SECONDS = 1000;
 const ONE_MINUTES = 60000;
 const ONE_HOURS = 3600000;
@@ -128,7 +127,6 @@ const formatTime = (msSeconds: number) => {
   return displayTime.join('')
 }
 
-
 // 勉強時間、作業時間を保存
 export const RecordConfirmModal = ({closeModal}: RecordConfirmModalProps) => {
   const {culcurateTotalTime, resetRecords} = useStudyTime()
@@ -140,8 +138,8 @@ export const RecordConfirmModal = ({closeModal}: RecordConfirmModalProps) => {
 
   async function regsterRecord() {
     try {
-      const response = await axios.post(
-        'http://localhost:3000/api/v1/study_records',
+      const response = await api.post(
+        '/study_records',
         {study_record: {work_seconds: totalTime.record.work_time, rest_seconds: totalTime.record.rest_time}},
         {
           withCredentials: true,

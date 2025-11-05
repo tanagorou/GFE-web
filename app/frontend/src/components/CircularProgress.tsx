@@ -18,7 +18,6 @@ type CircularProgressProps = {
 export default function CircularProgress({
   totalMs,
   remainingMs,
-  size = 90,
   strokeWidth = 5,
   showLabel = true,
   label,

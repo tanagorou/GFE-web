@@ -1,5 +1,5 @@
-import { useSidebarOpen } from "../../context/SidebarContext";
 import { Link } from "react-router-dom"
+import { useSidebarOpen } from "../../context/SidebarContext";
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import { styled } from '@mui/material/styles';
 
@@ -66,9 +66,9 @@ export const Navbar = () => {
         <LogoText>GFE-web</LogoText>
       </LogoContainer>
       <NavLinks>
-        <NavLink><NavLinkText to='/'>Home</NavLinkText></NavLink>
+        <NavLink><NavLinkText to='/home'>Home</NavLinkText></NavLink>
         <NavLink><NavLinkText to='/study'>Study</NavLinkText></NavLink>
-        <NavLink><NavLinkText to='/signin'>Login</NavLinkText></NavLink>
+        {/* <NavLink><NavLinkText to='/signin'>Login</NavLinkText></NavLink> */}
         <NavLink><NavLinkText to='/logout'>Logout</NavLinkText></NavLink>
         <NavLink><NavLinkText to='/profile'>Profile</NavLinkText></NavLink>
       </NavLinks>

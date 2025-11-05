@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
 import { useState } from "react";
-import axios from "axios";
-import axiosCaseConverter from "simple-axios-case-converter";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import { useAuth } from "../../context/AuthContext";
+import { api } from "../../api/api";
 import { styled } from '@mui/material/styles';
 import { Button, TextField } from "@mui/material";
 import Divider from "@mui/material/Divider";
@@ -26,17 +25,15 @@ const LoginCard = styled('div')({
   boxShadow: '0 0 10px rgba(0,0,0,0.1)',
 })
 
-axiosCaseConverter(axios)
-
 type userData = {
   email: string;
   password: string;
 };
 
 export default function SignIn() {
-  const apiUrl = "http://localhost:3000/api/v1/auth_token";
   const navigate = useNavigate()
   const { login } = useAuth()
+  const {enqueueSnackbar} = useSnackbar()
 
   const [userData, setUserData] = useState<userData>({
     email: "",
@@ -55,8 +52,8 @@ export default function SignIn() {
     e.preventDefault();
     try {
       console.log('userData:',userData)
-      const response = await axios.post(
-        apiUrl,
+      const response = await api.post(
+        '/auth_token',
         { auth: userData },
         {
           withCredentials: true,
@@ -66,18 +63,19 @@ export default function SignIn() {
           },
         }
       );
-      console.log("成功", response);
+      console.log("成功", response.data);
       login(response.data)
       navigate('/home')
     } catch (err: any) {
       console.log("エラー", err.response.data);
+      enqueueSnackbar('エラーが発生しました', {variant: 'error'})
     }
   };
 
   return (
     <Container>
       <LoginCard>
-        <h1>サインアップフォーム</h1>
+        <h1>サインイン</h1>
         <form onSubmit={hundleSubmit}>
           <TextField 
             variant="outlined" 
@@ -128,16 +126,6 @@ export default function SignIn() {
             新規登録
           </Link>
         <Divider sx={{ my: 3, width: '100%' }}></Divider>
-        {/* <Link
-            component="button"
-            variant="body2"
-            onClick={() => {
-              console.info("I'm a button.");
-              navigate('/signup')
-            }}
-          >
-          Googleでログイン
-        </Link> */}
         <Link
           component="button"
           variant="body2"
