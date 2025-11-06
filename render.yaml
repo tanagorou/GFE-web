@@ -28,6 +28,27 @@ services:
         value: production
       - key: PORT
         value: "10000"
+        
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: mysql
+          property: host
+      - key: DB_PORT
+        fromService:
+          type: pserv
+          name: mysql
+          property: port
+      - key: DB_NAME
+        value: app_db
+      - key: DB_USER
+        value: app_user
+      - key: DB_PASSWORD
+        sync: false
+
+
+
+
       - key: UID
         sync: false
       - key: GID
