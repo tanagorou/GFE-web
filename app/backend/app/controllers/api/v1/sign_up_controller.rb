@@ -87,20 +87,4 @@ class Api::V1::SignUpController < ApplicationController
     encode_access_token.payload[:sub]
   end
 
-  # # 404ヘッダーのみの返却を行う
-  # # Doc: https://gist.github.com/mlanett/a31c340b132ddefa9cca
-  # def not_found
-  #   head(:not_found)
-  # end
-
-  # # decode jti != user.refresh_jti のエラー処理
-  # def invalid_jti
-  #   msg = "Invalid jti for refresh token"
-  #   render status: 401, json: { status: 401, error: msg }
-  # end
-
-  # def auth_params
-  #   params.require(:auth).permit(:email, :password)
-  # end
-
 end

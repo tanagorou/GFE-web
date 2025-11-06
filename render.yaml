@@ -16,7 +16,7 @@ services:
         sync: false
       - key: USERNAME
         sync: false
-      - key: REACT_APP_API_BASE_URL
+      - key: FRONT_URL
         sync: false
       - key: SECRET_KEY_BASE
         sync: false
@@ -41,7 +41,7 @@ services:
     envVars:
       - key: PORT
         value: "10000"
-      - key: RAILS_API_URL
+      - key: REACT_APP_BASE_URL
         sync: false
 
 databases:

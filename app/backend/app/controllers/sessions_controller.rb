@@ -21,10 +21,11 @@ class SessionsController < ApplicationController
       Rails.logger.info('アプリユーザー登録されています。')
       set_refresh_token_to_cookie
       token = access_token
+      front_url = ENV.fetch('FRONT_URL', 'http://localhost:8000')
       # 1. クエリーにアクセストークンlを渡して送信。
       # 2. フロント側でアクセストークンを読み込み、その後/auth_tokenにリクエスト
       # 3. リフレッシュトークンとアクセストークンを発行して送信。
-      redirect_to "http://localhost:8000/auth/callback?token=#{token}", allow_other_host: true
+      redirect_to "#{front_url}/auth/callback?token=#{token}", allow_other_host: true
     else
       Rails.logger.info('アプリユーザーは登録されていなかったので、作成します。')
       user = User.create(name: google_user_name,
@@ -40,8 +41,7 @@ class SessionsController < ApplicationController
                          )
       set_refresh_token_to_cookie
       token = access_token
-      puts "こんなURLにリダイレクトします。http://localhost:8000/auth/callback?email=#{token}"
-      redirect_to "http://localhost:8000/auth/callback?token=#{token}", allow_other_host: true
+      redirect_to "#{front_url}/auth/callback?token=#{token}", allow_other_host: true
     end
   end
 
