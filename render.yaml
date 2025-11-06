@@ -3,6 +3,7 @@ services:
     name: mysql
     env: docker
     plan: starter
+    image: mysql:8.0  # ← ここで公式イメージを指定
     envVars:
       - key: MYSQL_ROOT_PASSWORD
         sync: false
@@ -12,8 +13,8 @@ services:
         value: app_user
       - key: MYSQL_PASSWORD
         sync: false
-    disk:
-        name: mysql
+    disks:
+      - name: mysql-data
         mountPath: /var/lib/mysql
         sizeGB: 10
 
@@ -28,27 +29,6 @@ services:
         value: production
       - key: PORT
         value: "10000"
-
-      - key: DB_HOST
-        fromService:
-          type: pserv
-          name: mysql
-          property: host
-      - key: DB_PORT
-        fromService:
-          type: pserv
-          name: mysql
-          property: port
-      - key: DB_NAME
-        value: app_db
-      - key: DB_USER
-        value: app_user
-      - key: DB_PASSWORD
-        sync: false
-
-
-
-
       - key: UID
         sync: false
       - key: GID
@@ -66,8 +46,10 @@ services:
       - key: JWT_SECRET_KEY
         sync: false
       - key: DATABASE_URL
-        value: mysql2://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?encoding=utf8mb4
-
+        fromDatabase:
+          type: pserv
+          name: mysql
+          property: connectionString
 
   # --- React（serve 版）---
   - type: web
