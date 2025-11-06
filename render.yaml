@@ -50,7 +50,7 @@ services:
         fromDatabase:
           type: pserv
           name: mysql
-          property: connectionString
+          property: host
 
   # --- React（serve 版）---
   - type: web
