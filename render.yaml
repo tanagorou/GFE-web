@@ -45,7 +45,7 @@ services:
         sync: false
 
 databases:
-  name: gfe-db
-  plan: free
-  databaseName: gfe-db
-  user: app_user
+  - name: gfe-db
+    plan: free
+    databaseName: gfe-db
+    user: app_user
