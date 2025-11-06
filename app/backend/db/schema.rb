@@ -11,7 +11,10 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2025_11_05_065936) do
-  create_table "study_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "study_records", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "work_seconds", null: false
     t.integer "rest_seconds", null: false
@@ -20,7 +23,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_05_065936) do
     t.index ["user_id"], name: "index_study_records_on_user_id"
   end
 
-  create_table "user_authentications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "user_authentications", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "provider"
     t.string "uid"
@@ -29,7 +32,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_05_065936) do
     t.index ["user_id"], name: "index_user_authentications_on_user_id"
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
     t.string "password_digest", null: false

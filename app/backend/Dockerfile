@@ -4,7 +4,10 @@ ARG UID
 ARG GID
 ARG USERNAME
 
-RUN apt-get update -qq && apt-get install -y nodejs default-mysql-client
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends \
+      nodejs postgresql-client libpq-dev build-essential && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
