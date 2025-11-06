@@ -9,11 +9,6 @@ services:
       mountPath: /var/lib/mysql
       sizeGB: 10
     envVars:
-      - fromGroup: mysql
-    
-    envVarGroups:
-      name: mysql
-      envVars:
       - key: MYSQL_DATABASE
         value: mysql
       - key: MYSQL_USER
@@ -22,6 +17,7 @@ services:
         generateValue: true
       - key: MYSQL_ROOT_PASSWORD
         generateValue: true
+    
 
   - type: web
     name: GFE-web-api
