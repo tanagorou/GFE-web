@@ -1,23 +1,27 @@
 services:
   - type: pserv
     name: mysql
+    plan: standard
     env: docker
-    plan: starter
-    image:
-      url: mysql:8.0  # ← ここで公式イメージを指定
-    envVars:
-      - key: MYSQL_ROOT_PASSWORD
-        sync: false
-      - key: MYSQL_DATABASE
-        value: app_db
-      - key: MYSQL_USER
-        value: app_user
-      - key: MYSQL_PASSWORD
-        sync: false
+    autoDeploy: false
     disk:
-        name: mysql
-        mountPath: /var/lib/mysql
-        sizeGB: 10
+      name: mysql
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+    envVars:
+      - fromGroup: mysql
+    
+    envVarGroups:
+      name: mysql
+      envVars:
+      - key: MYSQL_DATABASE
+        value: mysql
+      - key: MYSQL_USER
+        value: mysql
+      - key: MYSQL_PASSWORD
+        generateValue: true
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
 
   - type: web
     name: GFE-web-api
