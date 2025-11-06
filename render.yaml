@@ -28,7 +28,7 @@ services:
         value: production
       - key: PORT
         value: "10000"
-        
+
       - key: DB_HOST
         fromService:
           type: pserv
@@ -66,9 +66,8 @@ services:
       - key: JWT_SECRET_KEY
         sync: false
       - key: DATABASE_URL
-        fromDatabase:
-          name: mysql
-          property: connectionString
+        value: mysql2://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?encoding=utf8mb4
+
 
   # --- React（serve 版）---
   - type: web
