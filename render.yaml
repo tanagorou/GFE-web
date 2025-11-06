@@ -1,4 +1,22 @@
 services:
+  - type: pserv
+    name: mysql
+    env: docker
+    plan: starter
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        sync: false
+      - key: MYSQL_DATABASE
+        value: app_db
+      - key: MYSQL_USER
+        value: app_user
+      - key: MYSQL_PASSWORD
+        sync: false
+    disks:
+      - name: mysql
+        mountPath: /var/lib/mysql
+        sizeGB: 10
+
   - type: web
     name: GFE-web-api
     env: docker
@@ -43,6 +61,3 @@ services:
         value: "10000"
       - key: RAILS_API_URL
         sync: false
-databases:
-  - name: app-db
-    plan: starter
