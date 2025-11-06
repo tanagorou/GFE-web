@@ -47,7 +47,7 @@ services:
       - key: JWT_SECRET_KEY
         sync: false
       - key: DATABASE_URL
-        fromDatabase:
+        fromService:
           type: pserv
           name: mysql
           property: host
