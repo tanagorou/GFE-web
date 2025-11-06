@@ -3,7 +3,8 @@ services:
     name: mysql
     env: docker
     plan: starter
-    image: mysql:8.0  # ← ここで公式イメージを指定
+    image:
+      url: mysql:8.0  # ← ここで公式イメージを指定
     envVars:
       - key: MYSQL_ROOT_PASSWORD
         sync: false
