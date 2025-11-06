@@ -28,7 +28,7 @@ services:
         sync: false
       - key: DATABASE_URL
         fromDatabase:
-          name: mydatabase
+          name: gfe-db
           property: connectionString
 
   # --- React（serve 版）---
@@ -47,5 +47,5 @@ services:
 databases:
   - name: gfe-db
     plan: free
-    databaseName: gfe-db
+    databaseName: gfe_db
     user: app_user
