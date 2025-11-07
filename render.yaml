@@ -5,6 +5,10 @@ services:
     plan: free
     rootDir: app/backend
     dockerfilePath: ./Dockerfile
+    buildCommand: |
+      bundle install
+    startCommand: |
+      bundle exec rails db:migrate && bundle exec puma -C config/puma.rb
     envVars:
       - key: RAILS_ENV
         value: production
