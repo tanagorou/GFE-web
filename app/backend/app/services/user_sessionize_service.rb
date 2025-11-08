@@ -2,6 +2,13 @@ module UserSessionizeService
 
   # セッションユーザーが居ればtrue、存在しない場合は401を返す
   def sessionize_user
+    
+    Rails.logger.info "Origin: #{request.headers['Origin']}"
+    Rails.logger.info "Cookie keys: #{cookies.to_h.keys}"
+    Rails.logger.info "RT (plain)? #{cookies[:refresh_token].present?}"
+    Rails.logger.info "RT (encrypted)? #{begin !!cookies.encrypted[:refresh_token] rescue false end}"
+    Rails.logger.info "is Production? #{Rails.env.production?}" 
+  
     session_user.present? || unauthorized_user
   end
 

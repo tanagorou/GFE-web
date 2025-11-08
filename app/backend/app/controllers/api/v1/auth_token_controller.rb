@@ -32,12 +32,6 @@ class Api::V1::AuthTokenController < ApplicationController
   # リフレッシュ
   def refresh
 
-    Rails.logger.info "Origin: #{request.headers['Origin']}"
-    Rails.logger.info "Cookie keys: #{cookies.to_h.keys}"
-    Rails.logger.info "RT (plain)? #{cookies[:refresh_token].present?}"
-    Rails.logger.info "RT (encrypted)? #{begin !!cookies.encrypted[:refresh_token] rescue false end}"
-    Rails.logger.info "is Production? #{Rails.env.production?}" 
-  
     token = cookies[:refresh_token] # or cookies.encrypted[:refresh_token]
     @user = session_user
     set_refresh_token_to_cookie
