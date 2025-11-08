@@ -23,12 +23,13 @@ module App
     #   end
     # end
     # ここまで
-    config.force_ssl = true
+    # config.force_ssl = true
 
     config.middleware.use ActionDispatch::Cookies
     
-    config.action_dispatch.cookies_same_site_protection = ENV["COOKIES_SAME_SITE"].to_sym if Rails.env.production?
-
+    # 開発環境ではsameSite: noneを使用（クロスオリジンリクエスト対応）
+    # 本番環境では production.rb で設定（sameSite: none + secure: true）
+    config.action_dispatch.cookies_same_site_protection = :none unless Rails.env.production?
 
     config.middleware.use ActionDispatch::Session::CookieStore
     # Initialize configuration defaults for originally generated Rails version.
