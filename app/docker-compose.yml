@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:18
+    image: postgres
     environment:
       POSTGRES_DB: app_db
       POSTGRES_USER: app_user
