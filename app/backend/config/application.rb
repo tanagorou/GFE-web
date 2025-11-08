@@ -23,6 +23,7 @@ module App
     #   end
     # end
     # ここまで
+    config.force_ssl = true
 
     config.middleware.use ActionDispatch::Cookies
     
