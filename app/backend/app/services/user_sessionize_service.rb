@@ -4,10 +4,16 @@ module UserSessionizeService
   def sessionize_user
     
     Rails.logger.info "Origin: #{request.headers['Origin']}"
-    Rails.logger.info "Cookie keys: #{cookies.to_h.keys}"
-    Rails.logger.info "RT (plain)? #{cookies[:refresh_token].present?}"
-    Rails.logger.info "RT (encrypted)? #{begin !!cookies.encrypted[:refresh_token] rescue false end}"
-    Rails.logger.info "is Production? #{Rails.env.production?}" 
+    Rails.logger.info "RAW Cookie (headers['Cookie']): #{request.headers['Cookie'].inspect}"
+    Rails.logger.info "RAW Cookie (env['HTTP_COOKIE']): #{request.env['HTTP_COOKIE'].inspect}"
+    Rails.logger.info "request.cookies keys: #{request.cookies.keys}"
+    Rails.logger.info "cookies helper keys: #{cookies.to_h.keys}"
+
+    rt_plain      = request.cookies['refresh_token']      # ←まずこれで見る
+    rt_helper     = cookies[:refresh_token]               # ←helperでも確認
+    rt_encrypted  = (cookies.encrypted[:refresh_token] rescue nil)
+
+    Rails.logger.info "rt_plain=#{rt_plain.present?} rt_helper=#{rt_helper.present?} rt_encrypted=#{rt_encrypted.present?}"
   
     session_user.present? || unauthorized_user
   end

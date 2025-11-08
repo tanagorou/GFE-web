@@ -10,6 +10,7 @@ module App
   class Application < Rails::Application
     config.time_zone = 'Tokyo'
     config.active_record.default_timezone= :local
+    config.api_only = true
 
     # 追記：CORSエラー解消
     # config.middleware.insert_before 0, Rack::Cors do
@@ -26,12 +27,10 @@ module App
     # config.force_ssl = true
 
     config.middleware.use ActionDispatch::Cookies
-    
+    config.middleware.use ActionDispatch::Session::CookieStore
     # 開発環境ではsameSite: noneを使用（クロスオリジンリクエスト対応）
     # 本番環境では production.rb で設定（sameSite: none + secure: true）
     config.action_dispatch.cookies_same_site_protection = :none unless Rails.env.production?
-
-    config.middleware.use ActionDispatch::Session::CookieStore
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
@@ -51,6 +50,5 @@ module App
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
-    config.api_only = true
   end
 end
