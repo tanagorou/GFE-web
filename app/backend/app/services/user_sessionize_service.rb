@@ -37,18 +37,40 @@ module UserSessionizeService
 
     # refresh_tokenから有効なユーザーを取得する
     def fetch_user_from_refresh_token
-      User.from_refresh_token(token_from_cookies)
-    rescue JWT::InvalidJtiError
+      token = token_from_cookies
+      Rails.logger.info "fetch_user_from_refresh_token: token=#{token.present? ? 'present' : 'nil'}"
+      
+      user = User.from_refresh_token(token)
+      Rails.logger.info "fetch_user_from_refresh_token: user found=#{user.present?}, user_id=#{user&.id}"
+      user
+    rescue JWT::InvalidJtiError => e
       # jtiエラーの場合はcontrollerに処理を委任
+      Rails.logger.error "JWT::InvalidJtiError: #{e.message}"
+      Rails.logger.error e.backtrace.first(5).join("\n")
       catch_invalid_jti
-    rescue UserAuth.not_found_exception_class,
-           JWT::DecodeError, JWT::EncodeError
+    rescue UserAuth.not_found_exception_class => e
+      Rails.logger.error "User not found: #{e.message}"
+      Rails.logger.error e.backtrace.first(5).join("\n")
+      nil
+    rescue JWT::DecodeError => e
+      Rails.logger.error "JWT::DecodeError: #{e.message}"
+      Rails.logger.error e.backtrace.first(5).join("\n")
+      nil
+    rescue JWT::EncodeError => e
+      Rails.logger.error "JWT::EncodeError: #{e.message}"
+      Rails.logger.error e.backtrace.first(5).join("\n")
+      nil
+    rescue => e
+      Rails.logger.error "Unexpected error in fetch_user_from_refresh_token: #{e.class.name}: #{e.message}"
+      Rails.logger.error e.backtrace.first(10).join("\n")
       nil
     end
 
     # refresh_tokenのユーザーを返す
     def session_user
-      return nil unless token_from_cookies
+      token = token_from_cookies
+      Rails.logger.info "session_user: token=#{token.present? ? 'present' : 'nil'}"
+      return nil unless token
       @_session_user ||= fetch_user_from_refresh_token
     end
 

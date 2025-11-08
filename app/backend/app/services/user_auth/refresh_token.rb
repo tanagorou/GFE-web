@@ -10,9 +10,17 @@ module UserAuth
       if token.present?
         # decode
         @token = token
+        Rails.logger.info "RefreshToken#initialize: decoding token"
         #[{payload},{header}]が返ってくる
-        @payload = JWT.decode(@token.to_s, decode_key, true, verify_claims).first
-        @user_id = get_user_id_from(@payload)
+        begin
+          @payload = JWT.decode(@token.to_s, decode_key, true, verify_claims).first
+          @user_id = get_user_id_from(@payload)
+          Rails.logger.info "RefreshToken#initialize: token decoded successfully, user_id=#{@user_id.present? ? 'present' : 'nil'}"
+        rescue => e
+          Rails.logger.error "RefreshToken#initialize: JWT decode error - #{e.class.name}: #{e.message}"
+          Rails.logger.error e.backtrace.first(5).join("\n")
+          raise
+        end
       else
         # encode
         @user_id = encrypt_for(user_id)
@@ -71,9 +79,18 @@ module UserAuth
       # デコード時のjwt_idを検証する(エラーはJWT::DecodeErrorに委託する)
       def verify_jti?(jti, payload)
         user_id = get_user_id_from(payload)
+        Rails.logger.info "verify_jti?: user_id from payload=#{user_id.present? ? 'present' : 'nil'}, jti=#{jti}"
         decode_user = entity_for_user(user_id)
-        decode_user.refresh_jti == jti
-      rescue UserAuth.not_found_exception_class
+        Rails.logger.info "verify_jti?: user found=#{decode_user.present?}, user_id=#{decode_user&.id}, user.refresh_jti=#{decode_user&.refresh_jti}, token.jti=#{jti}"
+        result = decode_user.refresh_jti == jti
+        Rails.logger.info "verify_jti?: result=#{result}"
+        result
+      rescue UserAuth.not_found_exception_class => e
+        Rails.logger.error "verify_jti?: User not found - #{e.message}"
+        false
+      rescue => e
+        Rails.logger.error "verify_jti?: Unexpected error - #{e.class.name}: #{e.message}"
+        Rails.logger.error e.backtrace.first(5).join("\n")
         false
       end
 
