@@ -26,7 +26,9 @@ module App
 
     config.middleware.use ActionDispatch::Cookies
     
-    config.action_dispatch.cookies_same_site_protection = ENV["COOKIES_SAME_SITE"].to_sym if Rails.env.production?
+    # config.action_dispatch.cookies_same_site_protection = ENV["COOKIES_SAME_SITE"].to_sym if Rails.env.production?
+    config.action_dispatch.cookies_same_site_protection = :none
+
 
     config.middleware.use ActionDispatch::Session::CookieStore
     # Initialize configuration defaults for originally generated Rails version.
