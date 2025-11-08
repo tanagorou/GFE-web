@@ -7,4 +7,5 @@ export const baseURL = process.env.REACT_APP_BASE_URL
 
 export const api = axios.create({
   baseURL: baseURL + '/api/v1',
+  withCredentials: true,  // クロスサイトリクエストでクッキーを送信するために必須
 })

@@ -34,7 +34,8 @@ class Api::V1::SignUpController < ApplicationController
       value: refresh_token,
       expires: refresh_token_expiration,
       secure: Rails.env.production?,
-      http_only: true
+      http_only: true,
+      same_site: :none  # クロスサイトリクエストでクッキーを送信するために必須
     }
   end
 
