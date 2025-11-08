@@ -10,6 +10,8 @@ services:
         value: production
       - key: PORT
         value: "10000"
+      - COOKIES_SAME_SITE
+        sync: false
       - key: UID
         sync: false
       - key: GID
