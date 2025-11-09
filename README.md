@@ -14,7 +14,6 @@ URL → https://gfe-web-nor6-okt7.onrender.com
 - **Frontend**: TypeScript  
 - **DB**: PostgreSQL  
 - **Infra**: Docker / Render（デプロイ）  
-- **その他**: jsbundling / esbuild / importmap など（構成に応じて）
 
 ---
 
