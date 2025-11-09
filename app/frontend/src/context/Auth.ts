@@ -1,6 +1,6 @@
 // 1. レスポンスから現在のUserを格納する関数 => setCurrentUser
 export const setCurrentUser = (data: any) => {
-  console.log(data)
+  // console.log(data)
   const currentUser = data ? { user: { current: data.user } } : { user: { current: '' } }
   return currentUser
 }

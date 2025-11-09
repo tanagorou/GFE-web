@@ -1,7 +1,7 @@
-import axios from "axios"
 import { createContext, useContext, useEffect, useState} from "react"
 import {setAccessToken, setCurrentUser, isExistUserAndExpired} from "./Auth"
 import { useLocation, useNavigate } from "react-router-dom";
+import { api } from "../api/api";
 
 type AuthContextType = {
   authToken: Record<string, any>
@@ -15,16 +15,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
   const navigate = useNavigate()
   const location = useLocation()
   const [authToken, setAuthToken] = useState({user:{current: ''}, auth: {token: '', expires: 0, payload: {}}})
-  console.log('authToken', authToken)
-
   useEffect(() => {
-    console.log('リロード時にトークンを発行')
+    // console.log('リロード時にトークンを発行')
     const refreshToken = async() => {
       try{
-        const respone = await axios.post(
-          "http://localhost:3000/api/v1/auth_token/refresh",
+        const response = await api.post(
+          '/auth_token/refresh',
           {},
-          { 
+          {
             withCredentials: true,
             headers: {
               "X-Requested-With": "XMLHttpRequest",
@@ -32,10 +30,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
             },
           }
         )
-        const data = respone.data
+        const data = response.data
         setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
       } catch (err){
-        console.log('リフレッシュトークンの有効期限が切れました。',err)
+        // console.log('リフレッシュトークンの有効期限が切れました。',err)
         navigate('/signin')
       }
     }
@@ -46,8 +44,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
     if(isExistUserAndExpired(authToken)){
       (async () => {
         try{
-          const response = await axios.post(
-            'http://localhost:3000/api/v1/auth_token/refresh',
+          const response = await api.post(
+            '/auth_token/refresh',
             {},
             {
               withCredentials: true,
@@ -61,7 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
           setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
           navigate('/home')
         } catch (err){
-          console.log(err)
+          // console.log(err)
           navigate('/signin')
         }
       })()

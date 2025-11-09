@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import LoadingProgress from "./LoadingProgress";
+import { api, baseURL } from "../api/api";
 
 export const handleGoogleLogin = () => {
-  window.location.href = 'http://localhost:3000/auth/google_oauth2'
+  window.location.href = baseURL + '/auth/google_oauth2'
 }
 
 export const GoogleCallback = () => {
@@ -18,8 +18,8 @@ export const GoogleCallback = () => {
     if(token){
       try{
         (async() => {
-          const response = await axios.post(
-            'http://localhost:3000/api/v1/auth_token/google_login',
+          const response = await api.post(
+            '/auth_token/google_login',
             {},
             {
               withCredentials: true,
@@ -30,16 +30,16 @@ export const GoogleCallback = () => {
               },
             }
           )
-          console.log("成功",response)
+          // console.log("成功",response)
           login(response.data)
           navigate('/home')
         })()
       }catch(err){
-        console.log('err',err)
+        // console.log('err',err)
       }
     } else {
-      console.log('tokenを取得できませんでした。')
-      // navigate('/signin')
+      // console.log('tokenを取得できませんでした。')
+      navigate('/signin')
     }
   },[navigate, search])
 

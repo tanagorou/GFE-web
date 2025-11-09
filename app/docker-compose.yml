@@ -1,12 +1,14 @@
 services:
   db:
-    image: mysql:8.0
+    image: postgres
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_DB: app_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: password
     ports:
-      - "3307:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - pg_data:/var/lib/postgresql
   
   back:
     build:
@@ -46,4 +48,4 @@ services:
     ports:
       - "8000:3000"
 volumes:
-  mysql_data:
+  pg_data:

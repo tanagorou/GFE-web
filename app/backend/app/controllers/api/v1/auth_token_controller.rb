@@ -31,6 +31,8 @@ class Api::V1::AuthTokenController < ApplicationController
 
   # リフレッシュ
   def refresh
+
+    token = cookies[:refresh_token] # or cookies.encrypted[:refresh_token]
     @user = session_user
     set_refresh_token_to_cookie
     render json: login_response

@@ -7,7 +7,6 @@ import StudyPage from "../pages/StudyPage";
 import Logout from "../components/logout/Logout";
 import { StudyTimeProvider } from "../context/StudyContext";
 import { StudyRecordList } from "../components/StudyRecordList";
-import { SnackbarProvider } from "notistack";
 import { NotificationPermissionProvider } from "../context/NotificationPermissionContext";
 import NotFound from "../pages/NotFound";
 import { GoogleCallback } from "../components/GoogleCallback";
@@ -22,16 +21,12 @@ export default function AppRoutes(){
         <Route path="/auth/callback" element={<GoogleCallback />} />
         <Route path="*" element={<NotFound />} />
         <Route element={
-          <SnackbarProvider
-          anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
-          >
-            <NotificationPermissionProvider>
-              <StudyTimeProvider>
-                  <Outlet />
-                </StudyTimeProvider>
-            </NotificationPermissionProvider>
-          </SnackbarProvider>
-            }>
+          <NotificationPermissionProvider>
+            <StudyTimeProvider>
+               <Outlet />
+            </StudyTimeProvider>
+          </NotificationPermissionProvider>
+          }>
           <Route element={<Layout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/study/*" element={<StudyPage/>}/>

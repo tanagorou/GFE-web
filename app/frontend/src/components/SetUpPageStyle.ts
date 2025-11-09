@@ -1,6 +1,5 @@
 import { styled } from "@mui/material/styles";
 
-
 export const Overlay = styled("div")({
   position: "fixed",
   inset: 0,
@@ -145,25 +144,6 @@ export const Actions = styled("div")({
   gap: 10,
   justifyContent: "flex-end",
 });
-
-// const Primary = styled("button")({
-//   display: "inline-flex",
-//   alignItems: "center",
-//   gap: 8,
-//   padding: "12px 16px",
-//   borderRadius: 12,
-//   border: "none",
-//   cursor: "pointer",
-//   fontWeight: 700,
-//   fontSize: 14,
-//   color: "#fff",
-//   background:
-//     "linear-gradient(135deg, #0ea5e9 0%, #2563eb 50%, #7c3aed 100%)",
-//   boxShadow: "0 8px 18px rgba(14,165,233,.35)",
-//   transition: "transform .12s ease, box-shadow .2s ease, filter .2s ease",
-//   "&:hover": { filter: "brightness(1.03)", transform: "translateY(-1px)" },
-//   "&:active": { transform: "translateY(0)" },
-// });
 
 export const Primary = styled('button')({
   display: 'inline-flex',

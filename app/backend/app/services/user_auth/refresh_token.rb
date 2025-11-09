@@ -25,7 +25,12 @@ module UserAuth
     # 暗号化されたuserIDからユーザーを取得する
     def entity_for_user(id = nil)
       id ||= @user_id
-      User.find(decrypt_for(id))
+      decoded_id = decrypt_for(id)
+      if decoded_id.nil?
+        Rails.logger.error "entity_for_user: ユーザーIDの復号化に失敗しました"
+        raise UserAuth.not_found_exception_class
+      end
+      User.find(decoded_id)
     end
 
     private
@@ -71,9 +76,24 @@ module UserAuth
       # デコード時のjwt_idを検証する(エラーはJWT::DecodeErrorに委託する)
       def verify_jti?(jti, payload)
         user_id = get_user_id_from(payload)
-        decode_user = entity_for_user(user_id)
+        Rails.logger.info "verify_jti?: jti=#{jti}, user_id(encrypted)=#{user_id&.first(20)}..."
+        
+        decoded_user_id = decrypt_for(user_id)
+        Rails.logger.info "verify_jti?: decoded_user_id=#{decoded_user_id}"
+        
+        if decoded_user_id.nil?
+          Rails.logger.error "verify_jti?: ユーザーIDの復号化に失敗しました"
+          return false
+        end
+        
+        decode_user = User.find(decoded_user_id)
+        Rails.logger.info "verify_jti?: user.refresh_jti=#{decode_user.refresh_jti}, token_jti=#{jti}, match=#{decode_user.refresh_jti == jti}"
         decode_user.refresh_jti == jti
-      rescue UserAuth.not_found_exception_class
+      rescue UserAuth.not_found_exception_class => e
+        Rails.logger.error "verify_jti?: User not found: #{e.message}"
+        false
+      rescue => e
+        Rails.logger.error "verify_jti?: 予期しないエラー: #{e.class.name}: #{e.message}"
         false
       end
 

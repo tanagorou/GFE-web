@@ -4,7 +4,26 @@ ARG UID
 ARG GID
 ARG USERNAME
 
-RUN apt-get update -qq && apt-get install -y nodejs default-mysql-client
+ARG SECRET_KEY_BASE
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG JWT_SECRET_KEY
+ARG FRONT_URL
+ARG COOKIES_SAME_SITE
+ARG BASE_URL
+
+ENV SECRET_KEY_BASE=$SECRET_KEY_BASE
+ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+ENV GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+ENV JWT_SECRET_KEY=$JWT_SECRET_KEY
+ENV FRONT_URL=$FRONT_URL
+ENV COOKIES_SAME_SITE=$COOKIES_SAME_SITE
+ENV BASE_URL=$BASE_URL
+
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends \
+      nodejs postgresql-client libpq-dev build-essential && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

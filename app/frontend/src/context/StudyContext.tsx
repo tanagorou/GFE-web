@@ -1,7 +1,7 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState, useRef } from "react"
+import { createContext, ReactNode, useContext, useEffect, useState, useRef } from "react"
 import { useNotificationPermission } from "./NotificationPermissionContext"
-const StudyTimeContext = createContext<any>(undefined)
 
+const StudyTimeContext = createContext<any>(undefined)
 // ページ遷移が行われても、設定した勉強時間がリセットされないようにするためのContext
 export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [studyTime, setStudyTime] = useState(0)
@@ -19,7 +19,7 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
   const handleState = () => {
     const next = !restState
     setRestState(next)
-    console.log('next:',next)
+    // console.log('next:',next)
     if(next){
       setTimerCount(restTime)
       // 休憩時間に入ったので、勉強ポモドーロカウントを＋１増加させる
@@ -87,7 +87,7 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
         setTimerCount((prev) => prev - 1000)
       }, 1000)
     } else {
-      console.log('タイマー終了')
+      // console.log('タイマー終了')
       handleState()
     }
     return() => {

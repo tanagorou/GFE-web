@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: GFE-web-api
+    env: docker
+    plan: free
+    rootDir: app/backend
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: COOKIES_SAME_SITE
+        sync: false
+      - key: UID
+        sync: false
+      - key: GID
+        sync: false
+      - key: USERNAME
+        sync: false
+      - key: FRONT_URL
+        sync: false
+      - key: SECRET_KEY_BASE
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gfe-db
+          property: connectionString
+
+  # --- React（serve 版）---
+  - type: web
+    name: GFE-web
+    env: docker
+    plan: free
+    rootDir: app/frontend
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: REACT_APP_BASE_URL
+        sync: false
+
+databases:
+  - name: gfe-db
+    plan: free
+    databaseName: gfe_db
+    user: app_user

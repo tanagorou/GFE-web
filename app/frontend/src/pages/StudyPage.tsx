@@ -1,5 +1,4 @@
 import { useLocation, Location, Routes, Route, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import Study from "../components/Study";
 import SetupStudyTime from "../components/SetupStudyTime";
 import SetupRestTime from "../components/SetupReatTime";
@@ -14,10 +13,6 @@ export interface BackgroundState {
 
 export default function StudyPage() {
   const { studyTime, setStudyTime, restTime, setRestTime } = useStudyTime()
-  // const [ studyTimeMs, setStudyTimeMs ] = useState(0)
-  // const [ restTimeMs, setRestTimeMs ] = useState(0)
-
-
   const location = useLocation();
   const navigate = useNavigate();
   const background = (location.state as BackgroundLocation)?.background;

@@ -45,18 +45,18 @@ class StudyRecord < ApplicationRecord
     each_day_study_time = []
     point_date = Date.today.beginning_of_week - week_offset.week
     for i in 0..6
-      each_day_data = {study_time: [], date: []}
+      each_day_data = {time: [], date: []}
       day = point_date + i.days #Dateオブジェクトget_day_start_dateに渡す
       puts day, i
       from, to = get_day_start_date(day)
       record = StudyRecord.where(user_id: user_id).where(created_at: from..to)
       if(record.exists?)
         # each_day_study_time << record.sum(:work_seconds) / TimeUnits::ONE_MINUTES
-        each_day_data[:study_time] = record.sum(:work_seconds) / TimeUnits::ONE_MINUTES
+        each_day_data[:time] = record.sum(:work_seconds) / TimeUnits::ONE_MINUTES
         each_day_data[:date] = day
         each_day_study_time << each_day_data
       else
-        each_day_data[:study_time] = 0
+        each_day_data[:time] = 0
         each_day_data[:date] = day
         each_day_study_time << each_day_data
       end

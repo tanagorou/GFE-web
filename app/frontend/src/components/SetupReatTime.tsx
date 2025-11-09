@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+
+import { Overlay, Card, Header, TitleWrap, Title, Subtitle, Display, UnitHints, Grid, ControlButton, Actions, Primary, ResetBtn, IconGhostBtn, DisplayText, Column } from "./SetUpPageStyle";
+
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
-import { Overlay, Card, Header, TitleWrap, Title, Subtitle, Display, UnitHints, Grid, ControlButton, Actions, Primary, ResetBtn, IconGhostBtn, DisplayText, Column } from "./SetUpPageStyle";
 
 
 const ONE_SECONDS = 1000

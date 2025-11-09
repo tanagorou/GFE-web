@@ -1,5 +1,9 @@
 FROM node:21.5.0
 WORKDIR /app
+
+ARG REACT_APP_BASE_URL
+ENV REACT_APP_BASE_URL=$REACT_APP_BASE_URL
+
 COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .

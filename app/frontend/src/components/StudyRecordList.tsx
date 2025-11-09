@@ -1,35 +1,13 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { useAuth } from "../context/AuthContext"
+import { api } from "../api/api";
+
 import { styled } from '@mui/material/styles';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import WavingHandIcon from '@mui/icons-material/WavingHand';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import FormatterDemo from "./GraphStudy"
 import LoadingProgress from "./LoadingProgress"
-
-const ContainerLeft = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  flex: '0 0 60%',
-})
-
-const CardContainer = styled('div')({
-  flexWrap: 'wrap',
-  flexDirection: 'row',
-  flex: '0 0 40%',
-})
-
-const ContainerRight = styled('div')({
-  flex: '0 0 40%',
-})
-
-const ChartContainer = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  flex: '0 0 60%',
-  padding: 20
-})
 
 const Container = styled('div')({
   padding: 20,
@@ -157,8 +135,6 @@ const GraphBtn = styled('button')({
 })
 
 const ONE_HOURS = 60; // 60分
-const ONE_MINUTES = 1; // 1分
-
 
 const formatTime = (minutes: number) => {
   const hour = Math.floor(minutes / ONE_HOURS)
@@ -184,7 +160,7 @@ type Display = {
   week: Time,
   month: Time,
   total: Time,
-  eachDayStudyTime: GraphData[]
+  each: GraphData[]
 }
 
 const formatTimeToDisplay = (time: Time) => {
@@ -203,24 +179,23 @@ const formatTimeToDisplay = (time: Time) => {
 
 const week = ['月', '火', '水', '木', '金', '土', '日']
 
-const getGraphData = (data: {studyTime: number, date: string}[]) => {
+const getGraphData = (data: {time: number, date: string}[]) => {
+  // console.log(data)
   const graphData: {time: number, date: string}[] = []
   data.forEach((item, index) => {
-    const dataDetail = {time:item.studyTime, date: item.date.split('-').join('/') + '/' + week[index]}
+    const dataDetail = {time: item.time, date: item.date.split('-').join('/') + '/' + week[index]}
     graphData.push(dataDetail)
   })
-  console.log('graphData', graphData)
+  // console.log('graphData', graphData)
   return graphData
 }
-
-
-
 
 export const StudyRecordList = () => {
   const [displayTime, setDisplayTime] = useState<Display | null>(null)
   const [weekOffset, setWeekOffset] = useState<number>(0)
   const [ready, setReady] = useState<boolean>(false)
   const { authToken } = useAuth()
+  const userName = authToken.user.current.name  
 
   const handleWeekOffsetRight = () => {
     setWeekOffset(weekOffset + 1)
@@ -233,12 +208,10 @@ export const StudyRecordList = () => {
     const nextWeekOffset = weekOffset - 1
     graphRecord(nextWeekOffset)
   }
-   
-
 
   const graphRecord = async (weekOffset: number) => {
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/study_records/search?week_offset=${weekOffset}`,
+    const response = await api.get(
+      `/study_records/search?week_offset=${weekOffset}`,
       {
         withCredentials: true,
         headers: {
@@ -248,12 +221,13 @@ export const StudyRecordList = () => {
         },
       }
     )
-    console.log(response)
+    // console.log(response)
     setDisplayTime((prev) => {
+      console.log('prev:',prev)
       if(!prev) return null
       return {
         ...prev,
-        eachDayStudyTime: getGraphData(response.data.studyRecords.eachDayStudyTime)
+        each: getGraphData(response.data.record.each)
       }
     })
   }
@@ -262,8 +236,8 @@ export const StudyRecordList = () => {
     if(!authToken.auth.token) return
     const getStudyRecord = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/v1/study_records",
+        const response = await api.get(
+          "/study_records",
           {
             withCredentials: true,
             headers: {
@@ -273,22 +247,23 @@ export const StudyRecordList = () => {
             },
           }
         )
-        console.log(response)
+        // console.log(response)
         const d: Display = {
-          day: formatTime(response.data.studyRecords.dayRecords),
-          week: formatTime(response.data.studyRecords.weekRecords),
-          month: formatTime(response.data.studyRecords.monthRecords),
-          total: formatTime(response.data.studyRecords.allRecords),
-          eachDayStudyTime: getGraphData(response.data.studyRecords.eachDayStudyTime)
+          day: formatTime(response.data.record.day),
+          week: formatTime(response.data.record.week),
+          month: formatTime(response.data.record.month),
+          total: formatTime(response.data.record.all),
+          each: getGraphData(response.data.record.each)
         }
+        // console.log(d)
         setDisplayTime(d)
         setReady(true)
-        console.log(d)
       } catch (err: any) {
-        console.log(err)
+        // console.log(err)
       }
     }
     getStudyRecord()
+    // console.log('displayTime:', displayTime)
   }, [authToken])
 
 
@@ -299,7 +274,7 @@ export const StudyRecordList = () => {
         <Header>
           <TitleWrap>
             <WavingHandIcon style={{ color: 'rgba(7, 83, 21, 0.31)'}} />
-            <CommonTitle>お疲れ様です。ひなのさん</CommonTitle>
+            <CommonTitle>お疲れ様です{userName}さん！</CommonTitle>
           </TitleWrap>
         </Header>
         <Card>
@@ -335,13 +310,13 @@ export const StudyRecordList = () => {
           </TitleWrap>
           <GraphContainer>
             <GraphItem>
-              <FormatterDemo dataset={displayTime.eachDayStudyTime}/>
+              <FormatterDemo dataset={displayTime.each}/>
               <TransactionList>
                 <GraphBtn onClick={()=>handleWeekOffsetRight()}>
-                  xx
+                  前へ
                 </GraphBtn>
                 <GraphBtn onClick={()=>handleWeekOffsetLeft()}>
-                  xx
+                  次へ
                 </GraphBtn>
               </TransactionList>
             </GraphItem>
