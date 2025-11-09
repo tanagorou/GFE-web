@@ -47,7 +47,8 @@ module UserAuth
     def decrypt_for(user_id)
       return unless user_id
       crypt.decrypt_and_verify(user_id.to_s, purpose: :authorization)
-    rescue
+    rescue => e
+      Rails.logger.error "decrypt_for: 復号化エラー: #{e.class.name}: #{e.message}"
       nil
     end
 

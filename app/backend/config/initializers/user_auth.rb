@@ -28,8 +28,20 @@ module UserAuth
   self.token_signature_algorithm = "HS256"
 
   # 署名・検証に使用する秘密鍵
+  # 環境変数SECRET_KEY_BASEを優先し、なければcredentialsから取得
   mattr_accessor :token_secret_signature_key
-  self.token_secret_signature_key = Rails.application.credentials.secret_key_base
+  self.token_secret_signature_key = begin
+    if ENV['SECRET_KEY_BASE'].present?
+      Rails.logger.info "UserAuth: SECRET_KEY_BASE環境変数を使用"
+      ENV['SECRET_KEY_BASE']
+    else
+      Rails.logger.info "UserAuth: credentials.secret_key_baseを使用"
+      Rails.application.credentials.secret_key_base
+    end
+  rescue => e
+    Rails.logger.error "UserAuth: secret_key_baseの取得に失敗: #{e.message}"
+    raise
+  end
 
   # 署名・検証に使用する公開鍵(RS256)
   mattr_accessor :token_public_key

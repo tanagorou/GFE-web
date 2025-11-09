@@ -38,39 +38,37 @@ module UserSessionizeService
     # refresh_tokenから有効なユーザーを取得する
     def fetch_user_from_refresh_token
       token = token_from_cookies
-      Rails.logger.info "fetch_user_from_refresh_token: token=#{token.present? ? 'present' : 'nil'}"
+      Rails.logger.info "fetch_user_from_refresh_token: token存在=#{token.present?}, token長=#{token&.length}"
       
       user = User.from_refresh_token(token)
-      Rails.logger.info "fetch_user_from_refresh_token: user found=#{user.present?}, user_id=#{user&.id}"
+      Rails.logger.info "fetch_user_from_refresh_token: ユーザー取得成功 user_id=#{user&.id}"
       user
     rescue JWT::InvalidJtiError => e
       # jtiエラーの場合はcontrollerに処理を委任
-      Rails.logger.error "JWT::InvalidJtiError: #{e.message}"
-      Rails.logger.error e.backtrace.first(5).join("\n")
+      Rails.logger.error "JWT::InvalidJtiError: #{e.message}, #{e.backtrace.first(3).join(', ')}"
       catch_invalid_jti
     rescue UserAuth.not_found_exception_class => e
-      Rails.logger.error "User not found: #{e.message}"
-      Rails.logger.error e.backtrace.first(5).join("\n")
+      Rails.logger.error "UserAuth.not_found_exception_class: #{e.message}, #{e.backtrace.first(3).join(', ')}"
       nil
     rescue JWT::DecodeError => e
-      Rails.logger.error "JWT::DecodeError: #{e.message}"
-      Rails.logger.error e.backtrace.first(5).join("\n")
+      Rails.logger.error "JWT::DecodeError: #{e.message}, #{e.backtrace.first(3).join(', ')}"
+      nil
+    rescue JWT::ExpiredSignature => e
+      Rails.logger.error "JWT::ExpiredSignature: #{e.message}, #{e.backtrace.first(3).join(', ')}"
       nil
     rescue JWT::EncodeError => e
-      Rails.logger.error "JWT::EncodeError: #{e.message}"
-      Rails.logger.error e.backtrace.first(5).join("\n")
+      Rails.logger.error "JWT::EncodeError: #{e.message}, #{e.backtrace.first(3).join(', ')}"
       nil
     rescue => e
-      Rails.logger.error "Unexpected error in fetch_user_from_refresh_token: #{e.class.name}: #{e.message}"
-      Rails.logger.error e.backtrace.first(10).join("\n")
+      Rails.logger.error "予期しないエラー: #{e.class.name}: #{e.message}, #{e.backtrace.first(5).join(', ')}"
       nil
     end
 
     # refresh_tokenのユーザーを返す
     def session_user
       token = token_from_cookies
-      Rails.logger.info "session_user: token=#{token.present? ? 'present' : 'nil'}"
       return nil unless token
+      Rails.logger.info "session_user: トークンからユーザー取得を試行"
       @_session_user ||= fetch_user_from_refresh_token
     end
 
