@@ -54,7 +54,7 @@ export const Navbar = () => {
 
   const handle = () => {
     setSidebarOpen(!sidebarOpen)
-    console.log(sidebarOpen)
+    // console.log(sidebarOpen)
   }
 
   return (

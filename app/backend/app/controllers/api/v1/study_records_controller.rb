@@ -33,6 +33,7 @@ class Api::V1::StudyRecordsController < ApplicationController
   # その週の勉強時間を取ってくる
   def search
     week_offset = params[:week_offset].to_i || 0
+    # Rails.logger.info "user_id: #{current_user.id}"
     each = StudyRecord.new.get_each_day_study_time(current_user.id, week_offset = week_offset)
     render json: { record: { each: each}}
   end

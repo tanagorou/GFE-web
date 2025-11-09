@@ -185,7 +185,7 @@ const getGraphData = (data: {studyTime: number, date: string}[]) => {
     const dataDetail = {time:item.studyTime, date: item.date.split('-').join('/') + '/' + week[index]}
     graphData.push(dataDetail)
   })
-  console.log('graphData', graphData)
+  // console.log('graphData', graphData)
   return graphData
 }
 
@@ -220,7 +220,7 @@ export const StudyRecordList = () => {
         },
       }
     )
-    console.log(response)
+    // console.log(response)
     setDisplayTime((prev) => {
       if(!prev) return null
       return {
@@ -245,7 +245,7 @@ export const StudyRecordList = () => {
             },
           }
         )
-        console.log(response)
+        // console.log(response)
         const d: Display = {
           day: formatTime(response.data.record.day),
           week: formatTime(response.data.record.week),
@@ -256,7 +256,7 @@ export const StudyRecordList = () => {
         setDisplayTime(d)
         setReady(true)
       } catch (err: any) {
-        console.log(err)
+        // console.log(err)
       }
     }
     getStudyRecord()

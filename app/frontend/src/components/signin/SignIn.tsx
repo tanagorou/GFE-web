@@ -51,7 +51,7 @@ export default function SignIn() {
   const hundleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log('userData:',userData)
+      // console.log('userData:',userData)
       const response = await api.post(
         '/auth_token',
         { auth: userData },
@@ -63,11 +63,11 @@ export default function SignIn() {
           },
         }
       );
-      console.log("成功", response.data);
+      // console.log("成功", response.data);
       login(response.data)
       navigate('/home')
     } catch (err: any) {
-      console.log("エラー", err.response.data);
+      // console.log("エラー", err.response.data);
       enqueueSnackbar('エラーが発生しました', {variant: 'error'})
     }
   };

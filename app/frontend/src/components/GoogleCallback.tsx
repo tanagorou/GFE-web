@@ -30,15 +30,15 @@ export const GoogleCallback = () => {
               },
             }
           )
-          console.log("成功",response)
+          // console.log("成功",response)
           login(response.data)
           navigate('/home')
         })()
       }catch(err){
-        console.log('err',err)
+        // console.log('err',err)
       }
     } else {
-      console.log('tokenを取得できませんでした。')
+      // console.log('tokenを取得できませんでした。')
       navigate('/signin')
     }
   },[navigate, search])

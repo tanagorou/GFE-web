@@ -69,7 +69,7 @@ export default function SignUp() {
       login(response.data)
       navigate('/home')
     } catch (err: any) {
-      console.log("エラー", err.response.data);
+      // console.log("エラー", err.response.data);
       enqueueSnackbar('エラーが発生しました', {variant: 'error'})
     }
   };

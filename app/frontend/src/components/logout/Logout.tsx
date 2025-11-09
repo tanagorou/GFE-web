@@ -21,11 +21,11 @@ export default function Logout (){
             },
           }
         )
-        console.log('ログアウト成功:', response)
+        // console.log('ログアウト成功:', response)
         logout()
         navigate('/signin')
       } catch (err){
-        console.log('ログアウト失敗:', err)
+        // console.log('ログアウト失敗:', err)
         navigate('/signin')
       }
     })()
