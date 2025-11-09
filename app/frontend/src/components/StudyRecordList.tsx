@@ -179,10 +179,11 @@ const formatTimeToDisplay = (time: Time) => {
 
 const week = ['月', '火', '水', '木', '金', '土', '日']
 
-const getGraphData = (data: {studyTime: number, date: string}[]) => {
+const getGraphData = (data: {time: number, date: string}[]) => {
+  // console.log(data)
   const graphData: {time: number, date: string}[] = []
   data.forEach((item, index) => {
-    const dataDetail = {time:item.studyTime, date: item.date.split('-').join('/') + '/' + week[index]}
+    const dataDetail = {time: item.time, date: item.date.split('-').join('/') + '/' + week[index]}
     graphData.push(dataDetail)
   })
   // console.log('graphData', graphData)
@@ -222,6 +223,7 @@ export const StudyRecordList = () => {
     )
     // console.log(response)
     setDisplayTime((prev) => {
+      console.log('prev:',prev)
       if(!prev) return null
       return {
         ...prev,
@@ -253,6 +255,7 @@ export const StudyRecordList = () => {
           total: formatTime(response.data.record.all),
           each: getGraphData(response.data.record.each)
         }
+        // console.log(d)
         setDisplayTime(d)
         setReady(true)
       } catch (err: any) {
@@ -260,6 +263,7 @@ export const StudyRecordList = () => {
       }
     }
     getStudyRecord()
+    // console.log('displayTime:', displayTime)
   }, [authToken])
 
 
