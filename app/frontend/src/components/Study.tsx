@@ -10,6 +10,7 @@ import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined
 import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import { useSnackbar } from "notistack";
 // …既存の定数・Propsなどはそのまま…
 
 const SetUpCard = styled('div')({
@@ -269,8 +270,9 @@ const TimeCard = styled('div')({
 
 export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onOpenRecordConfirmModal}:Props){
   const { handleToggle, localEnabled } = useNotificationPermission()
-  const { nextTimeState, playMusic, setPlayMusic } = useStudyTime()
+  const { totalTime, nextTimeState, playMusic, setPlayMusic } = useStudyTime()
   const [ active, setActive ] = useState(localEnabled)
+  const { enqueueSnackbar } = useSnackbar()
 
   const formatTime = (msSeconds: number) => {
     const hour = Math.floor(msSeconds / ONE_HOURS);
@@ -284,8 +286,28 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
   const handle = (p: boolean) => {
     handleToggle()
     setActive(!p)
-    console.log(active)
+    // console.log(active)
   }
+
+  const handleOpenStudySettingsPage = () => {
+    // タイマー作動中、もしくは記録を保存していないときは作業・休憩時間の変更は不可
+    if(nextTimeState === 'active') return
+    if(totalTime.study || totalTime.rest !== 0){
+      enqueueSnackbar('記録を保存してください', {variant: 'error'})
+      return
+    }
+    onOpenStudy()
+  }
+
+  const handleOpenRestSettingsPage = () => {
+    if(nextTimeState === 'active') return
+    if(totalTime.study || totalTime.rest !== 0){
+      enqueueSnackbar('記録を保存してください', {variant: 'error'})
+      return
+    }
+    onOpenRest()
+  }
+  
 
   const selectItems = sounds.map((item: any) => (
     <option key={item.id} value={item.id}>{item.name}</option>
@@ -299,7 +321,7 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
     const audioTitle = sounds[e.target.value - 1].name
     const audioPath = new Audio(sounds[e.target.value - 1].path)
     setPlayMusic({title: audioTitle, path: audioPath})
-    console.log(playMusic)
+    // console.log(playMusic)
   }
 
   const clickPlayMusic = () => {
@@ -330,7 +352,7 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
           <Sub>このセッションで使われる作業・休憩の長さです。</Sub>
 
           <Stat style={{ borderTop: 'none' }}>
-            <LabelPill type="button" onClick={() => onOpenStudy()}>
+            <LabelPill type="button" onClick={() => handleOpenStudySettingsPage()}>
               <AccessTimeOutlinedIcon style={{ fontSize: 16 }} />
               作業時間
             </LabelPill>
@@ -339,7 +361,7 @@ export default function Study({studyTime, restTime, onOpenStudy, onOpenRest, onO
           </Stat>
 
           <Stat style={{ borderTop: 'none' }}>
-            <LabelPillRest type="button" onClick={() => onOpenRest()}>
+            <LabelPillRest type="button" onClick={() => handleOpenRestSettingsPage()}>
               <FreeBreakfastOutlinedIcon style={{ fontSize: 16 }} />
               休憩時間
             </LabelPillRest>
