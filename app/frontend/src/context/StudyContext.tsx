@@ -7,6 +7,7 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
   const [studyTime, setStudyTime] = useState(0)
   const [restTime, setRestTime] = useState(0)
   const [timerCount, setTimerCount] = useState(0)
+  const [totalTime, setTotalTime] = useState({study: 0, rest: 0})
   const [nextTimeState, setNextTimeState] = useState('standby')
   const [restState, setRestState] = useState(false)
   const [pomodoreCount, setPomodoreCount] = useState({study: 0, rest: 0})
@@ -57,10 +58,12 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
     if(restState){
       const study = pomodoreCount.study * studyTime
       const rest = pomodoreCount.rest * restTime + (restTime - timerCount)
+      setTotalTime({study: study, rest: rest })
       return {record: {work_time: study, rest_time: rest}}
     }else{
       const study = pomodoreCount.study * studyTime + (studyTime - timerCount)
       const rest = pomodoreCount.rest * restTime
+      setTotalTime({study: study, rest: rest })
       return {record: {work_time: study, rest_time: rest}}
     }
   }
@@ -101,6 +104,7 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
               setStudyTime,
               restTime,
               setRestTime,
+              totalTime,
               nextTimeState,
               setNextTimeState,
               timerCount,
