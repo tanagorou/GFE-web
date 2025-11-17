@@ -16,7 +16,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
   const location = useLocation()
   const [authToken, setAuthToken] = useState({user:{current: ''}, auth: {token: '', expires: 0, payload: {}}})
   useEffect(() => {
-    // console.log('リロード時にトークンを発行')
+    console.log(location)
+    if(location.pathname === '/auth/callback') return
     const refreshToken = async() => {
       try{
         const response = await api.post(
@@ -33,7 +34,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
         const data = response.data
         setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
       } catch (err){
-        // console.log('リフレッシュトークンの有効期限が切れました。',err)
         navigate('/signin')
       }
     }
@@ -59,7 +59,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
           setAuthToken({...setCurrentUser(data),...setAccessToken(data)})
           navigate('/home')
         } catch (err){
-          // console.log(err)
           navigate('/signin')
         }
       })()

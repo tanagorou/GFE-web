@@ -16,10 +16,9 @@ class SessionsController < ApplicationController
     google_user_name = auth['name']
     password = SecureRandom.urlsafe_base64(32)
     @user = UserAuthentication.find_by(uid: google_user_id, provider: provider)
-
+    Rails.logger.info(auth)
     if @user
       Rails.logger.info('アプリユーザー登録されています。')
-      set_refresh_token_to_cookie
       token = access_token
       front_url = ENV.fetch('FRONT_URL', 'http://localhost:8000')
       # 1. クエリーにアクセストークンlを渡して送信。
@@ -39,7 +38,6 @@ class SessionsController < ApplicationController
                          uid: google_user_id,
                          provider: provider
                          )
-      set_refresh_token_to_cookie
       token = access_token
       redirect_to "#{front_url}/auth/callback?token=#{token}", allow_other_host: true
     end
