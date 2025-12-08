@@ -8,7 +8,6 @@ class SessionsController < ApplicationController
   def create
     user_info = request.env['omniauth.auth']
     auth = user_info['info']
-    
     google_user_id = user_info['uid']
     provider = user_info['provider']
 
@@ -16,7 +15,6 @@ class SessionsController < ApplicationController
     google_user_name = auth['name']
     password = SecureRandom.urlsafe_base64(32)
     @user = UserAuthentication.find_by(uid: google_user_id, provider: provider)
-    Rails.logger.info(auth)
     if @user
       Rails.logger.info('アプリユーザー登録されています。')
       token = access_token

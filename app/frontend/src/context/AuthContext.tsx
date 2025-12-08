@@ -16,7 +16,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}
   const location = useLocation()
   const [authToken, setAuthToken] = useState({user:{current: ''}, auth: {token: '', expires: 0, payload: {}}})
   useEffect(() => {
-    console.log(location)
     if(location.pathname === '/auth/callback') return
     const refreshToken = async() => {
       try{
