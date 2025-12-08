@@ -58,12 +58,12 @@ export const StudyTimeProvider: React.FC<{children: ReactNode}> = ({children}) =
     if(restState){
       const study = pomodoreCount.study * studyTime
       const rest = pomodoreCount.rest * restTime + (restTime - timerCount)
-      setTotalTime({study: study, rest: rest })
+      // setTotalTime({study: study, rest: rest })
       return {record: {work_time: study, rest_time: rest}}
     }else{
       const study = pomodoreCount.study * studyTime + (studyTime - timerCount)
       const rest = pomodoreCount.rest * restTime
-      setTotalTime({study: study, rest: rest })
+      // setTotalTime({study: study, rest: rest })
       return {record: {work_time: study, rest_time: rest}}
     }
   }
